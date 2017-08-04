@@ -28,11 +28,16 @@
 }
 
 .todo__title {
+  border: 0;
+  font-size: 14px;
   margin-left: 10px;
   margin-right: 10px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
+  padding: 10px 0;
+  text-indent: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
 }
 
 .todo--complete .todo__title {

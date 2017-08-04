@@ -1,8 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
 import _ from 'lodash';
-
-
 import './App.css';
 
 const Title = ({ todoCount }) => {
@@ -46,13 +44,21 @@ const TodoForm = ({ addTodo }) => {
   );
 };
 
-const Todo = ({ todo, remove, done, move }) => {
+const Todo = ({ todo, remove, done, move, edit }) => {
+
+  const onEnter = (id, event) => {
+    if (event.keyCode == 13) {
+      event.target.blur()
+      edit(todo.id, event.target.value)
+    }
+  }
+
   return (
     <div className={'todo ' + (todo.complete ? 'todo--complete' : '')}>
       <label id={todo.id}>
         <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.complete} />
       </label>
-      <div className="todo__title" title={todo.text}>{todo.text}</div>
+      <input className="todo__title" type="text" title={todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onChange={(event) => { edit(todo.id, event.target.value) }}/>
       <div className="todo__remove" onClick={() => { remove(todo.id); }}>&times;</div>
       <TodoMove todo={todo} move={move} />
     </div>
@@ -82,7 +88,7 @@ const sortDesc = (a,b) => b.updatedAt - a.updatedAt;
 
 const sortAsc = (a,b) =>  a.updatedAt - b.updatedAt;
 
-const TodoListToday = ({ todos, remove, done, showDone, move }) => {
+const TodoListToday = ({ todos, remove, done, showDone, move, edit }) => {
   let todayDone = todos.filter(isToday).filter(isDone).sort(sortDesc);
   let todayNotDone = todos.filter(isToday).filter(isNotDone).sort(sortDesc);
   let todayAllTodos = [];
@@ -98,7 +104,7 @@ const TodoListToday = ({ todos, remove, done, showDone, move }) => {
       <div className="todo-list-section">
         <div className="todo-list-section__header">Today</div>
         {todayAllTodos.map(todo => (
-          <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} />
+          <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
         ))}
       </div>
     );
@@ -123,7 +129,7 @@ const TodoListOther = ({ todos, remove, done, showDone, move, edit }) => {
       <div className="todo-list-section">
         <div className="todo-list-section__header">Older</div>
         {otherAllTodos.map(todo => (
-          <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} />
+          <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
         ))}
       </div>
     );
@@ -185,8 +191,16 @@ class TodoApp extends React.Component {
     this.saveState(remainder);
   }
 
-  handleEdit(id) {
-    console.log("edit..." + id);
+  handleEdit (id, value) {
+    const remainder = this.state.data.filter(todo => {
+      if (todo.id === id) {
+        todo.text = value;
+        return todo;
+      }
+      if (todo.id !== id) return todo;
+    });
+    this.setState({ data: remainder });
+    this.saveState(remainder);
   }
 
   todoCount() {
