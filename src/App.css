@@ -10,15 +10,16 @@
 .todo {
   display: flex;
   align-items: center;
-  padding: 6px 10px;
+  padding: 10px 10px;
   border: 1px solid #ccc;
+  border-left-width: 3px;
   cursor: pointer;
-  border-radius: 3px;
   margin-bottom: 4px;
+  border-radius: 3px;
 }
 
 .todo:hover {
-  background-color: #edfbff;
+  border-left-color: #0366d6;
 }
 
 .todo--complete,
@@ -29,6 +30,9 @@
 .todo__title {
   margin-left: 10px;
   margin-right: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .todo--complete .todo__title {
@@ -47,9 +51,14 @@
   justify-content: center;
   align-items: center;
   background-color: #f9f9f9;
-  border-radius: 3px;
   color: #ccc;
   cursor: pointer;
+  opacity: 0;
+}
+
+.todo:hover .todo__remove,
+.todo:hover .todo__move {
+  opacity: 1;
 }
 
 .todo__remove:hover,
@@ -106,13 +115,28 @@
   width: 100%;
   margin-bottom: 20px;
   font-size: 14px;
-  padding: 8px 4px;
-  border-radius: 3px;
   border: 2px solid #ccc;
-  text-indent: 4px;
+  text-indent: 10px;
+  height: 52px;
+  border-radius: 3px;
 }
 
 .input:focus {
   border-color: #0366d6;
   outline: 0;
+}
+
+.input[type="checkbox"] {
+  margin: 0;
+}
+
+label {
+  line-height: 0;
+  padding: 20px;
+  border-right: 1px solid #f9f9f9;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  margin-left: -10px;
+  margin-right: 5px;
+  background-color: #f9f9f9;
 }

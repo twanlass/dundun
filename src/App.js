@@ -1,5 +1,8 @@
 import React from 'react';
 import Moment from 'moment';
+import _ from 'lodash';
+
+
 import './App.css';
 
 const Title = ({ todoCount }) => {
@@ -46,14 +49,10 @@ const TodoForm = ({ addTodo }) => {
 const Todo = ({ todo, remove, done, move }) => {
   return (
     <div className={'todo ' + (todo.complete ? 'todo--complete' : '')}>
-      <input
-        type="checkbox"
-        onClick={() => {
-          done(todo.id);
-        }}
-        defaultChecked={todo.complete}
-      />
-      <div className="todo__title">{todo.text}</div>
+      <label id={todo.id}>
+        <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.complete} />
+      </label>
+      <div className="todo__title" title={todo.text}>{todo.text}</div>
       <div className="todo__remove" onClick={() => { remove(todo.id); }}>&times;</div>
       <TodoMove todo={todo} move={move} />
     </div>
@@ -71,9 +70,9 @@ const TodoMove = ({ todo, move }) => {
 }
 
 // Basic set of todo filters
-const isToday = todo => Moment.utc(todo.updatedAt).isSame(Moment(), 'day');
+const isToday = todo => Moment(todo.updatedAt).isSame(Moment().valueOf(), 'day');
 
-const isNotToday = todo => !Moment.utc(todo.updatedAt).isSame(Moment(), 'day');
+const isNotToday = todo => !Moment(todo.updatedAt).isSame(Moment().valueOf(), 'day');
 
 const isDone = todo => todo.complete;
 
@@ -84,17 +83,21 @@ const sortDesc = (a,b) => b.updatedAt - a.updatedAt;
 const sortAsc = (a,b) =>  a.updatedAt - b.updatedAt;
 
 const TodoListToday = ({ todos, remove, done, showDone, move }) => {
-  let todayTodoNodes = todos.filter(isToday).sort(sortDesc);
+  let todayDone = todos.filter(isToday).filter(isDone).sort(sortDesc);
+  let todayNotDone = todos.filter(isToday).filter(isNotDone).sort(sortDesc);
+  let todayAllTodos = [];
 
-  if(!showDone) {
-    todayTodoNodes = todayTodoNodes.filter(isNotDone)
+  if(showDone) {
+    todayAllTodos = _.union(todayNotDone, todayDone);
+  } else {
+    todayAllTodos = todayNotDone;
   }
 
-  if (todayTodoNodes.length) {
+  if (todayAllTodos.length) {
     return (
       <div className="todo-list-section">
         <div className="todo-list-section__header">Today</div>
-        {todayTodoNodes.map(todo => (
+        {todayAllTodos.map(todo => (
           <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} />
         ))}
       </div>
@@ -104,18 +107,22 @@ const TodoListToday = ({ todos, remove, done, showDone, move }) => {
   }
 }
 
-const TodoListOther = ({ todos, remove, done, showDone, move }) => {
-  let otherTodoNodes = todos.filter(isNotToday).sort(sortDesc);
+const TodoListOther = ({ todos, remove, done, showDone, move, edit }) => {
+  let otherDone = todos.filter(isNotToday).filter(isDone).sort(sortDesc);
+  let otherNotDone = todos.filter(isNotToday).filter(isNotDone).sort(sortDesc);
+  let otherAllTodos = [];
 
-  if(!showDone) {
-    otherTodoNodes = otherTodoNodes.filter(isNotDone)
+  if(showDone) {
+    otherAllTodos = _.union(otherNotDone, otherDone);
+  } else {
+    otherAllTodos = otherNotDone;
   }
 
-  if (otherTodoNodes.length) {
+  if (otherAllTodos.length) {
     return (
       <div className="todo-list-section">
         <div className="todo-list-section__header">Older</div>
-        {otherTodoNodes.map(todo => (
+        {otherAllTodos.map(todo => (
           <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} />
         ))}
       </div>
@@ -140,7 +147,7 @@ class TodoApp extends React.Component {
   }
 
   addTodo(val) {
-    const todo = {text: val, complete: false, id: performance.now(), createdAt: Moment(), updatedAt: Moment()};
+    const todo = {text: val, complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: Moment().valueOf()};
     this.state.data.push(todo);
     this.setState({ data: this.state.data });
     this.saveState(this.state.data);
@@ -169,13 +176,17 @@ class TodoApp extends React.Component {
   handleMove(id) {
     const remainder = this.state.data.filter(todo => {
       if (todo.id === id) {
-        todo.updatedAt = Moment();
+        todo.updatedAt = Moment().valueOf();
         return todo;
       }
       if (todo.id !== id) return todo;
     });
     this.setState({ data: remainder });
     this.saveState(remainder);
+  }
+
+  handleEdit(id) {
+    console.log("edit..." + id);
   }
 
   todoCount() {
@@ -198,7 +209,7 @@ class TodoApp extends React.Component {
     if (localStorage.getItem('todos')){
       return JSON.parse(localStorage.getItem('todos'));
     } else {
-      return [{ text: "Share this todo app with friends ;-)", complete: false, id: performance.now(), createdAt: Moment(), updatedAt: Moment()}];
+      return [{ text: "Share this todo app with friends ;-)", complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: Moment().valueOf()}];
     }
   }
 
@@ -217,6 +228,7 @@ class TodoApp extends React.Component {
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
+          edit={this.handleEdit.bind(this)}
         />
         <TodoListOther
           showDone={this.state.showDone}
@@ -224,6 +236,7 @@ class TodoApp extends React.Component {
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
+          edit={this.handleEdit.bind(this)}
         />
       </div>
     );
