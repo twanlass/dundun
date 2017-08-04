@@ -6,7 +6,7 @@ import './App.css';
 const Title = ({ todoCount }) => {
   return (
       <div className="title">
-        TooDoos ({todoCount})
+        Todos ({todoCount})
       </div>
   );
 };
@@ -34,7 +34,8 @@ const TodoForm = ({ addTodo }) => {
     >
       <input
         className="input"
-        placeholder="New todo..."
+        placeholder="What needs doing?"
+        autoFocus={true}
         ref={node => {
           input = node;
         }}
