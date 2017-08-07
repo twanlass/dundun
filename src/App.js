@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import _ from 'lodash';
+import chrono from 'chrono-node';
 import './App.css';
 
 const Title = ({ todoCount }) => {
@@ -60,6 +61,7 @@ const Todo = ({ todo, remove, done, move, edit }) => {
         <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.complete} />
       </label>
       <input className="todo__title" type="text" title={todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onChange={(event) => { edit(todo.id, event.target.value) }}/>
+      <TodoDueAt todo={todo} />
       <div className="todo__remove" onClick={() => { remove(todo.id); }}>&times;</div>
       <TodoMove todo={todo} move={move} />
     </div>
@@ -67,7 +69,7 @@ const Todo = ({ todo, remove, done, move, edit }) => {
 };
 
 const TodoMove = ({ todo, move }) => {
-  if (isNotToday(todo)) {
+  if (isPast(todo)) {
     return (
       <div className="todo__move" onClick={() => { move(todo.id); }}>&#8593;</div>
     )
@@ -76,18 +78,54 @@ const TodoMove = ({ todo, move }) => {
   }
 }
 
+const TodoDueAt = ({ todo }) => {
+  if (todo.dueAt) {
+    return (
+      <div className="todo__due-at">{Moment(todo.dueAt).format('h:mm A')}</div>
+    )
+  } else {
+    return null;
+  }
+}
+
 // Basic set of todo filters
+// Date
+const isFuture = todo => Moment(todo.updatedAt).isAfter(Moment().valueOf(), 'day');
 const isToday = todo => Moment(todo.updatedAt).isSame(Moment().valueOf(), 'day');
+const isPast = todo => Moment(todo.updatedAt).isBefore(Moment().valueOf(), 'day');
 
-const isNotToday = todo => !Moment(todo.updatedAt).isSame(Moment().valueOf(), 'day');
-
+// Status
 const isDone = todo => todo.complete;
-
 const isNotDone = todo => !todo.complete;
 
+// Sorting
 const sortDesc = (a,b) => b.updatedAt - a.updatedAt;
-
 const sortAsc = (a,b) =>  a.updatedAt - b.updatedAt;
+
+const TodoListFuture = ({ todos, remove, done, showDone, move, edit }) => {
+  let futureDone = todos.filter(isFuture).filter(isDone).sort(sortDesc);
+  let futureNotDone = todos.filter(isFuture).filter(isNotDone).sort(sortDesc);
+  let futureAllTodos = [];
+
+  if(showDone) {
+    futureAllTodos = _.union(futureNotDone, futureDone);
+  } else {
+    futureAllTodos = futureNotDone;
+  }
+
+  if (futureAllTodos.length) {
+    return (
+      <div className="todo-list-section">
+        <div className="todo-list-section__header">Upcoming</div>
+        {futureAllTodos.map(todo => (
+          <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
+        ))}
+      </div>
+    );
+  } else {
+    return null;
+  }
+}
 
 const TodoListToday = ({ todos, remove, done, showDone, move, edit }) => {
   let todayDone = todos.filter(isToday).filter(isDone).sort(sortDesc);
@@ -114,9 +152,9 @@ const TodoListToday = ({ todos, remove, done, showDone, move, edit }) => {
   }
 }
 
-const TodoListOther = ({ todos, remove, done, showDone, move, edit }) => {
-  let otherDone = todos.filter(isNotToday).filter(isDone).sort(sortDesc);
-  let otherNotDone = todos.filter(isNotToday).filter(isNotDone).sort(sortDesc);
+const TodoListPast = ({ todos, remove, done, showDone, move, edit }) => {
+  let otherDone = todos.filter(isPast).filter(isDone).sort(sortDesc);
+  let otherNotDone = todos.filter(isPast).filter(isNotDone).sort(sortDesc);
   let otherAllTodos = [];
 
   if(showDone) {
@@ -151,10 +189,31 @@ class TodoApp extends React.Component {
 
   componentDidMount() {
     this.setState({ data: this.loadState() });
+    document.addEventListener("visibilitychange", this.handleTabFocus.bind(this), false);
+  }
+
+  handleTabFocus() {
+    if (document.visibilityState === 'visible') {
+      // When the window is opened or focused, refresh the list
+      this.forceUpdate()
+    }
   }
 
   addTodo(val) {
-    const todo = {text: val, complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: Moment().valueOf()};
+    let NLDate = chrono.parse(val);
+    let updatedAt = Moment().valueOf();
+    let dueAt = null;
+    let text = val;
+
+    if (NLDate.length) {
+      updatedAt = Moment(NLDate[0].start.date()).isSame(Moment().valueOf(), 'day') ? Moment().valueOf() : Moment(NLDate[0].start.date()).valueOf();
+      if (NLDate[0].start.knownValues.hour) {
+        dueAt = Moment(NLDate[0].start.date()).valueOf();
+      }
+      text = text.replace(NLDate[0].text, '');
+    }
+
+    const todo = {text: text, complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: updatedAt, dueAt: dueAt};
     this.state.data.push(todo);
     this.setState({ data: this.state.data });
     this.saveState(this.state.data);
@@ -237,6 +296,14 @@ class TodoApp extends React.Component {
                          toggleShowDone={this.toggleShowDone.bind(this)} />
         </div>
         <TodoForm addTodo={this.addTodo.bind(this)} />
+        <TodoListFuture
+          showDone={this.state.showDone}
+          todos={this.state.data}
+          remove={this.handleRemove.bind(this)}
+          done={this.handleDone.bind(this)}
+          move={this.handleMove.bind(this)}
+          edit={this.handleEdit.bind(this)}
+        />
         <TodoListToday
           showDone={this.state.showDone}
           todos={this.state.data}
@@ -245,7 +312,7 @@ class TodoApp extends React.Component {
           move={this.handleMove.bind(this)}
           edit={this.handleEdit.bind(this)}
         />
-        <TodoListOther
+        <TodoListPast
           showDone={this.state.showDone}
           todos={this.state.data}
           remove={this.handleRemove.bind(this)}

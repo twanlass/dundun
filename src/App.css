@@ -2,22 +2,21 @@
   box-sizing: border-box;
 }
 
-body,
 html {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  width: 100%;
+    height: 100%;
 }
-
-html {
-  background-image: linear-gradient(#f3f5f7, #fff);
-  background-color: #f3f5f7;
-  background-repeat: no-repeat;
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-image: linear-gradient(#f3f5f7, #fff);
+    background-color: #f3f5f7;
+    font-family: 'Archivo Narrow', sans-serif;
 }
 
 .todos-app {
-  max-width: 600px;
+  max-width: 700px;
   margin: 20px auto;
   background-color: #fff;
   box-shadow: 0 0 10px 0 rgba(0,0,0,.15);
@@ -46,22 +45,27 @@ html {
 }
 
 .todo__title {
+  background-color: transparent;
+  border-radius: 3px;
   border: 0;
-  font-size: 14px;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
   margin-right: 10px;
+  margin: 2px 0;
   overflow: hidden;
-  padding: 10px 0;
+  padding: 14px 0;
+  text-indent: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  background-color: transparent;
-  text-indent: 5px;
+  letter-spacing: -0.25px;
 }
 
-.todo__title:focus {
-  outline: none;
-  background-color: #f9f9f9;
-}
+  .todo__title:focus {
+    outline: none;
+    background-color: #e8ebf1;
+  }
 
 .todo--complete .todo__title {
   opacity: .5;
@@ -106,6 +110,15 @@ html {
 .todo--complete .todo__remove {
 }
 
+.todo__due-at {
+  white-space: nowrap;
+  background-color: #ddcfed;
+  border-radius: 3px;
+  font-size: 14px;
+  padding: 4px 6px;
+  color: rgba(0,0,0,.75);
+}
+
 .todo-list-options {
     margin-left: auto;
     font-size: 12px;
@@ -119,7 +132,7 @@ html {
 }
 
 .todo-list-section__header {
-    font-weight: bold;
+    font-weight: 700;
     font-size: 18px;
     margin-bottom: 0;
     padding-bottom: 10px;
@@ -129,7 +142,7 @@ html {
 .header {
   display: flex;
   align-items: center;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 20px;
 }
 
@@ -143,7 +156,7 @@ html {
 .input {
   width: 100%;
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size: 16px;
   border: 2px solid #ccc;
   text-indent: 10px;
   height: 52px;
