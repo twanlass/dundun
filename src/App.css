@@ -31,6 +31,10 @@ body {
   cursor: pointer;
 }
 
+.todo__actions {
+  display: flex;
+}
+
 .todo:not(:last-child) {
   border-bottom: 1px solid #f2f2f2;
 }
@@ -112,12 +116,19 @@ body {
 
 .todo__due-at {
   white-space: nowrap;
-  background-color: #ddcfed;
+  background-color: #fde499;
   border-radius: 3px;
   font-size: 14px;
   padding: 4px 6px;
   color: rgba(0,0,0,.75);
+  margin-left: 6px;
+  user-select: none;
 }
+
+  .todo--complete .todo__due-at {
+    background-color: #e7e7e7;
+    color: #969696;
+  }
 
 .todo-list-options {
     margin-left: auto;
@@ -136,7 +147,18 @@ body {
     font-size: 18px;
     margin-bottom: 0;
     padding-bottom: 10px;
+    padding-top: 10px;
     border-bottom: 1px solid #f9f9f9;
+    cursor: pointer;
+    user-select: none;
+}
+
+.todo-list-section__header:hover {
+  color: #0366d6;
+}
+
+.todo-list-section__header--hidden {
+  color: #ccc;
 }
 
 .header {
