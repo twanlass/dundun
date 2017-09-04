@@ -3,56 +3,91 @@
 // task notes, sub-tasks
 // sorting / big rocks / grouping of cal items?
 // show Dones by date (similar to a logbook)
+// Allow editing to add dates (re-parse text, add dueAt prop)
+// Auto-link text: https://github.com/OpenGov/react-autolink-text
+// Emojify text: https://github.com/banyan/react-emoji
+// Animation: https://github.com/reactjs/react-transition-group/tree/v1-stable
+// Create sub tasks by comma, i.e. "pricing experiement: paper, update designs, setup call"
+// Keyboard editing up / down, enter, e to close archive
 
 import React from 'react';
 import Moment from 'moment';
 import _ from 'lodash';
 import chrono from 'chrono-node';
+import { CSSTransitionGroup } from 'react-transition-group';
+import classNames from 'classnames';
 import './App.css';
 
 const Title = ({ todoCount }) => {
   return (
-      <div className="title">
-        Todos ({todoCount})
-      </div>
+      <div className="title">Todos</div>
   );
 };
+
+const TodoListDebugOptions = ({showDebug, updateDataStruct, resetData}) => {
+  if (showDebug) {
+    return (
+      <div className="todo-list-options">
+        <button onClick={() => {updateDataStruct()}}>update data struct</button>
+        <button onClick={() => {resetData()}}>reset todo data</button>
+      </div>
+    )
+  } else {
+    return null;
+  }
+}
 
 const TodoListOptions = ({showDone, toggleShowDone}) => {
   return (
     <div className="todo-list-options">
-      Show Dones? <input type="checkbox" defaultChecked={showDone} onClick={() => {
+      <label>Show Dones?
+        <input type="checkbox" defaultChecked={showDone} onClick={() => {
           toggleShowDone();
         }} />
+      </label>
     </div>
   )
 }
 
-const TodoForm = ({ addTodo }) => {
+const TodoForm = ({ add }) => {
   let input;
 
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        addTodo(input.value);
-        input.value = "";
-      }}
-    >
-      <input
-        className="input"
-        placeholder="Call tomorrow at 8:30am"
-        autoFocus={true}
-        ref={node => {
-          input = node;
+    <div className="todo todo--add">
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          add(input.value);
+          input.value = "";
         }}
-      />
-      <br />
-    </form>
+      >
+        <label>
+          <input type="checkbox" disabled="disabled" />
+        </label>
+        <input
+          className="todo__add"
+          placeholder="Add a new todo..."
+          autoFocus={true}
+          ref={node => {
+            input = node;
+          }}
+        />
+      </form>
+    </div>
   );
 };
 
-const Todo = ({ todo, remove, done, move, edit }) => {
+const TodoTasks = ({}) => {
+  return (
+    <div>
+      <label>Subtask 1<input type="checkbox" /></label>
+      <label>Subtask 2<input type="checkbox" /></label>
+      <label>Subtask 3<input type="checkbox" /></label>
+    </div>
+  )
+}
+
+const Todo = ({ todo, nowEditing, remove, done, move, edit, dragStart, dragEnd }) => {
 
   const onEnter = (id, event) => {
     if (event.keyCode === 13) {
@@ -61,12 +96,23 @@ const Todo = ({ todo, remove, done, move, edit }) => {
     }
   }
 
+  const onClick = () => {
+    // reset editing state
+    edit(null, '')
+  }
+
+  let todoClasses = classNames(
+    'todo',
+    {'todo--highlight': todo.id === nowEditing},
+    {'todo--complete': todo.complete}
+  );
+
   return (
-    <div className={'todo ' + (todo.complete ? 'todo--complete' : '')}>
+    <div className={todoClasses} draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
       <label id={todo.id}>
         <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.complete} />
       </label>
-      <input className="todo__title" type="text" title={todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onChange={(event) => { edit(todo.id, event.target.value) }}/>
+      <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onClick={() => { onClick()} }/>
       <TodoDueAt todo={todo} />
       <TodoFutureDay todo={todo} />
       <div className="todo__actions">
@@ -118,8 +164,8 @@ const isDone = todo => todo.complete;
 const isNotDone = todo => !todo.complete;
 
 // Sorting
-const sortDesc = (a,b) => b.updatedAt - a.updatedAt;
-const sortAsc = (a,b) =>  a.updatedAt - b.updatedAt;
+const sortDesc = (a,b) => b.id - a.id;
+const sortAsc = (a,b) =>  a.id - b.id
 
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
   return (
@@ -127,7 +173,7 @@ const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
   );
 };
 
-const TodoListFuture = ({ visible, toggleVisible, todos, remove, done, showDone, move, edit }) => {
+const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, add, remove, done, showDone, move, edit }) => {
   let futureDone = todos.filter(isFuture).filter(isDone).sort(sortDesc);
   let futureNotDone = todos.filter(isFuture).filter(isNotDone).sort(sortDesc);
   let futureAllTodos = [];
@@ -142,15 +188,18 @@ const TodoListFuture = ({ visible, toggleVisible, todos, remove, done, showDone,
     if(visible) {
       return (
         <div className="todo-list-section">
-          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Upcoming'} viewId={'future'} />
-          {futureAllTodos.map(todo => (
-            <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
-          ))}
+          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Soon (' + futureAllTodos.length + ')' } viewId={'future'} />
+          <CSSTransitionGroup transitionName="todo-" transitionEnterTimeout={250} transitionLeaveTimeout={150}>
+            {futureAllTodos.map(todo => (
+              <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
+            ))}
+          </CSSTransitionGroup>
+          <TodoForm add={add} />
         </div>
       );
     } else {
       return (
-        <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Upcoming'} viewId={'future'} />
+        <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Soon (' + futureAllTodos.length + ')' } viewId={'future'} />
       )
     }
   } else {
@@ -158,9 +207,9 @@ const TodoListFuture = ({ visible, toggleVisible, todos, remove, done, showDone,
   }
 }
 
-const TodoListToday = ({ visible, toggleVisible, todos, remove, done, showDone, move, edit }) => {
-  let todayDone = todos.filter(isToday).filter(isDone).sort(sortDesc);
-  let todayNotDone = todos.filter(isToday).filter(isNotDone).sort(sortDesc);
+const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, move, edit, dragStart, dragEnd, dragOver }) => {
+  let todayDone = todos.filter(isToday).filter(isDone);
+  let todayNotDone = todos.filter(isToday).filter(isNotDone);
   let todayAllTodos = [];
 
   if(showDone) {
@@ -169,36 +218,42 @@ const TodoListToday = ({ visible, toggleVisible, todos, remove, done, showDone, 
     todayAllTodos = todayNotDone;
   }
 
+  let todayTitle = todayNotDone.length ? 'Today (' + todayNotDone.length + ')' : 'Today'
+
+  let todoListClasses = classNames(
+    'todos todos--today',
+    {'todos--drag-active': nowDragging}
+  );
+
   if (visible) {
-    if (todayAllTodos.length) {
-      return (
-        <div className="todo-list-section">
-          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Today'} viewId={'today'} />
+    return (
+      <div className="todo-list-section">
+        <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={todayTitle} viewId={'today'} />
+        <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
           {todayAllTodos.map(todo => (
-            <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
+            <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} dragStart={dragStart} dragEnd={dragEnd} />
           ))}
-        </div>
-      );
-    } else {
-      return null;
-    }
+        </CSSTransitionGroup>
+        <TodoForm add={add} />
+      </div>
+    )
   } else {
     return (
-      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Today'} viewId={'today'} />
+      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Today (' + todayNotDone.length + ')' } viewId={'today'} />
     )
   }
 }
 
-const TodoListPast = ({ visible, toggleVisible, todos, remove, done, showDone, move, edit }) => {
+const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, remove, done, showDone, move, edit }) => {
   let otherNotDone = todos.filter(isPast).filter(isNotDone).sort(sortDesc);
 
   if (visible) {
     if (otherNotDone.length) {
       return (
         <div className="todo-list-section">
-          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Someday'} viewId={'someday'} />
+          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Backlog'} viewId={'someday'} />
           {otherNotDone.map(todo => (
-            <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
+            <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
           ))}
         </div>
       );
@@ -207,12 +262,12 @@ const TodoListPast = ({ visible, toggleVisible, todos, remove, done, showDone, m
     }
   } else {
     return (
-      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Someday'} viewId={'someday'} />
+      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Backlog'} viewId={'someday'} />
     )
   }
 }
 
-const TodoListDones = ({ visible, toggleVisible, todos, remove, done, showDone, move, edit }) => {
+const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done, showDone, move, edit }) => {
   let dones = todos.filter(isPast).filter(isDone).sort(sortDesc);
 
   if (visible) {
@@ -221,7 +276,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, remove, done, showDone, 
         <div className="todo-list-section">
           <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Dones'} viewId={'dones'} />
           {dones.map(todo => (
-            <Todo todo={todo} key={todo.id} remove={remove} done={done} move={move} edit={edit} />
+            <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
           ))}
         </div>
       );
@@ -235,7 +290,9 @@ const TodoListDones = ({ visible, toggleVisible, todos, remove, done, showDone, 
   }
 }
 
-
+// @todo - find a better place for this
+let placeholder = document.createElement('div');
+placeholder.className = 'todo--placeholder';
 
 class TodoApp extends React.Component {
   constructor(props) {
@@ -244,10 +301,13 @@ class TodoApp extends React.Component {
     this.state = {
       data: [],
       showDone: true,
+      showDebug: false,
       futureVisible: false,
       todayVisible: true,
       somedayVisible: false,
-      donesVisible: false
+      donesVisible: false,
+      nowEditing: null,
+      nowDragging: false
     };
   }
 
@@ -263,21 +323,23 @@ class TodoApp extends React.Component {
     }
   }
 
-  addTodo(val) {
+  handleAdd(val) {
+    let id = this.state.data.length + 1
     let NLDate = chrono.parse(val);
-    let updatedAt = Moment().valueOf();
+    let updatedAt = Moment({hour: 0}).valueOf();
     let dueAt = null;
     let text = val;
 
+    // If a date string was passed and parsed...
     if (NLDate.length) {
       updatedAt = Moment(NLDate[0].start.date()).isSame(Moment().valueOf(), 'day') ? Moment().valueOf() : Moment(NLDate[0].start.date()).valueOf();
       if (NLDate[0].start.knownValues.hour) {
         dueAt = Moment(NLDate[0].start.date()).valueOf();
       }
-      text = text.replace(NLDate[0].text, '');
+      text = text.replace(NLDate[0].text, '').trim();
     }
 
-    const todo = {text: text, complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: updatedAt, dueAt: dueAt, doneAt: null};
+    const todo = {text: text, complete: false, id: id, createdAt: Moment().valueOf(), updatedAt: updatedAt, dueAt: dueAt, doneAt: null};
     this.state.data.push(todo);
     this.setState({ data: this.state.data });
     this.saveState(this.state.data);
@@ -297,8 +359,9 @@ class TodoApp extends React.Component {
         todo.complete = !todo.complete;
         todo.doneAt = Moment().valueOf();
         return todo;
+      } else {
+        return todo
       }
-      if (todo.id !== id) return todo;
     });
     this.setState({ data: remainder });
     this.saveState(remainder);
@@ -307,7 +370,12 @@ class TodoApp extends React.Component {
   handleMove(id) {
     const remainder = this.state.data.filter(todo => {
       if (todo.id === id) {
-        todo.updatedAt = Moment(todo.updatedAt).add(1, 'd').valueOf()
+        // If todo is from the past (someday), then move it to today
+        if (Moment(todo.updatedAt).isBefore(Moment().valueOf(), 'day')) {
+          todo.updatedAt = Moment().valueOf()
+        } else {
+          todo.updatedAt = Moment(todo.updatedAt).add(1, 'd').valueOf()
+        }
         return todo;
       }
       if (todo.id !== id) return todo;
@@ -317,15 +385,74 @@ class TodoApp extends React.Component {
   }
 
   handleEdit (id, value) {
+    let nowEditingId = null;
+
     const remainder = this.state.data.filter(todo => {
+      // Is this the todo we need to edit?
       if (todo.id === id) {
-        todo.text = value;
+        // Has todo text changed?
+        if (todo.text !== value) {
+          todo.text = value;
+          nowEditingId = todo.id;
+          return todo;
+        } else {
+          return todo;
+          nowEditingId = null;
+        }
+      } else {
         return todo;
       }
-      if (todo.id !== id) return todo;
     });
-    this.setState({ data: remainder });
+    this.setState({ data: remainder, nowEditing: nowEditingId });
     this.saveState(remainder);
+  }
+
+  handleDragStart(e) {
+    this.setState({ nowDragging: true });
+
+    this.dragged = e.currentTarget;
+    e.dataTransfer.effectAllowed = 'move';
+    // Firefox requires dataTransfer data to be set
+    e.dataTransfer.setData("text/html", e.currentTarget);
+  }
+
+  handleDragEnd(e) {
+    this.setState({ nowDragging: false });
+    this.dragged.style.display = "flex";
+    this.dragged.parentNode.removeChild(placeholder);
+
+    let data = this.state.data;
+    let from = Number(this.dragged.dataset.id);
+    let to = Number(this.over.dataset.id);
+
+    let toIndex = data.findIndex(todo => todo.id === to);
+    let fromIndex = data.findIndex(todo => todo.id === from);
+
+    data.splice(toIndex, 0, data.splice(fromIndex, 1)[0]);
+    this.setState({data: data});
+    this.saveState(data);
+
+  }
+
+  handleDragOver(e) {
+    e.preventDefault();
+    this.dragged.style.display = "none";
+    if(e.target.className == "todo--placeholder") return;
+    this.over = e.target;
+
+    // Inside the dragOver method
+    let relY = e.clientY - this.over.offsetTop;
+    let height = this.over.offsetHeight / 2;
+    let parent = e.target.parentNode;
+
+    if(relY > height) {
+      this.nodePlacement = "after";
+      parent.insertBefore(placeholder, e.target.nextElementSibling);
+    }
+    else if(relY < height) {
+      this.nodePlacement = "before"
+      parent.insertBefore(placeholder, e.target);
+    }
   }
 
   todoCount() {
@@ -358,8 +485,22 @@ class TodoApp extends React.Component {
     if (localStorage.getItem('todos')){
       return JSON.parse(localStorage.getItem('todos'));
     } else {
-      return [{ text: "Share this todo app with friends ;-)", complete: false, id: performance.now(), createdAt: Moment().valueOf(), updatedAt: Moment().valueOf(), doneAt: null}];
+      return [{ text: "Share this todo app with friends ;-)", complete: false, id: 1, createdAt: Moment().valueOf(), updatedAt: Moment({hour: 0
+      }).valueOf(), dueAt: null, doneAt: null}];
     }
+  }
+
+  updateDataStruct() {
+    let updatedTodos = _.each(this.state.data, function(todo){
+      delete todo.sortId
+    });
+    this.setState({data: updatedTodos});
+    this.saveState(updatedTodos)
+  }
+
+  resetData(){
+    this.setState({data: []});
+    this.saveState([])
   }
 
   render() {
@@ -368,34 +509,47 @@ class TodoApp extends React.Component {
         <div className="header">
         <Title todoCount={this.todoCount()} />
         <TodoListOptions showDone={this.state.showDone}
-                         toggleShowDone={this.toggleShowDone.bind(this)} />
+                         toggleShowDone={this.toggleShowDone.bind(this)}
+                         resetData={this.resetData.bind(this)}
+                         updateDataStruct={this.updateDataStruct.bind(this)} />
+        <TodoListDebugOptions showDebug={this.state.showDebug}
+                              resetData={this.resetData.bind(this)}
+                              updateDataStruct={this.updateDataStruct.bind(this)} />
         </div>
-        <TodoForm addTodo={this.addTodo.bind(this)} />
         <TodoListFuture
           visible={this.state.futureVisible}
           toggleVisible={this.toggleVisible.bind(this)}
           showDone={this.state.showDone}
           todos={this.state.data}
+          nowEditing={this.state.nowEditing}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
           edit={this.handleEdit.bind(this)}
+          add={this.handleAdd.bind(this)}
         />
         <TodoListToday
           visible={this.state.todayVisible}
           toggleVisible={this.toggleVisible.bind(this)}
           showDone={this.state.showDone}
           todos={this.state.data}
+          nowEditing={this.state.nowEditing}
+          nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
           edit={this.handleEdit.bind(this)}
+          add={this.handleAdd.bind(this)}
+          dragStart={this.handleDragStart.bind(this)}
+          dragEnd={this.handleDragEnd.bind(this)}
+          dragOver={this.handleDragOver.bind(this)}
         />
         <TodoListPast
           visible={this.state.somedayVisible}
           toggleVisible={this.toggleVisible.bind(this)}
           showDone={this.state.showDone}
           todos={this.state.data}
+          nowEditing={this.state.nowEditing}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
@@ -406,6 +560,7 @@ class TodoApp extends React.Component {
           toggleVisible={this.toggleVisible.bind(this)}
           showDone={this.state.showDone}
           todos={this.state.data}
+          nowEditing={this.state.nowEditing}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}

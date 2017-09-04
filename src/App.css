@@ -24,18 +24,23 @@ body {
   border-radius: 4px;
 }
 
-.todo {
+.todo, .todo--placeholder {
   display: flex;
   align-items: center;
   border-left-width: 3px;
   cursor: pointer;
 }
 
+.todo--placeholder {
+  background-color: #f2f2f2;
+  height: 50px;
+}
+
 .todo__actions {
   display: flex;
 }
 
-.todo:not(:last-child) {
+.todo {
   border-bottom: 1px solid #f2f2f2;
 }
 
@@ -43,16 +48,44 @@ body {
   border-left-color: #0366d6;
 }
 
-.todo--complete,
-.todo--complete:hover {
-  background-color: #f9f9f9;
+.todo--highlight {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: todo-highlight;
+  animation-timing-function: ease-in-out;
 }
+
+.todo--add input[type="checkbox"] {
+  opacity: .5;
+}
+
+.todo__add {
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 2px 0;
+    border: 0;
+    padding: 14px 0;
+    white-space: nowrap;
+    width: 100%;
+    letter-spacing: -0.25px;
+    text-indent: 10px;
+}
+
+  .todo__add:focus {
+    outline: 0;
+  }
+
+  .todo__add::placeholder {
+    color: #0366d6;
+  }
 
 .todo__title {
   background-color: transparent;
   border-radius: 3px;
   border: 0;
-  color: #333;
+  color: #888;
   font-size: 16px;
   font-weight: 500;
   margin-right: 10px;
@@ -65,6 +98,20 @@ body {
   width: 100%;
   letter-spacing: -0.25px;
 }
+
+  .todos--today .todo:nth-child(1) .todo__title {
+    color: #000;
+    font-weight: 700;
+  }
+
+  .todos--today .todo:nth-child(2) .todo__title {
+    color: #333;
+    font-weight: 600;
+  }
+
+  .todos--today .todo:nth-child(3) .todo__title {
+    color: #555;
+  }
 
   .todo__title:focus {
     outline: none;
@@ -142,6 +189,11 @@ body {
   margin-bottom: 40px;
 }
 
+/*Ensure todo child elements are no drop targets for drag / drop sorting*/
+.todos--drag-active .todo * {
+  pointer-events: none;
+}
+
 .todo-list-section__header {
     font-weight: 700;
     font-size: 18px;
@@ -198,4 +250,46 @@ label {
   line-height: 0;
   cursor: default;
   padding: 10px 5px 10px;
+  user-select: none;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.todo--enter {
+  opacity: 0.01;
+  height: 20px;
+}
+
+.todo--enter.todo--enter-active {
+  opacity: 1;
+  transition-property: opacity, height;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  height: 50px;
+}
+
+.todo--leave {
+  opacity: 1;
+  height: 50px;
+}
+
+.todo--leave.todo--leave-active {
+  opacity: 0;
+  transition-property: opacity, height;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  height: 20px;
+}
+
+@keyframes todo-highlight {
+    0% {
+        background-color: #fde499;
+    }
+    100 {
+        background-color: #fff;
+    }
 }

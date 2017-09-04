@@ -1,0 +1,7 @@
+title: string
+complete: boolean
+id: int
+createdAt: unix timestamp
+updatedAt: unix timestamp
+dueAt: unix timestamp
+doneAt: unix timestamp
