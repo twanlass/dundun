@@ -19,7 +19,7 @@ body {
   max-width: 700px;
   margin: 20px auto;
   background-color: #fff;
-  box-shadow: 0 0 10px 0 rgba(0,0,0,.15);
+  box-shadow: 0 6px 10px 0 rgba(0,0,0,.15);
   padding: 20px;
   border-radius: 4px;
 }
@@ -37,15 +37,15 @@ body {
 }
 
 .todo__actions {
-  display: flex;
+  display: none;
 }
+
+  .todo:hover .todo__actions {
+    display: flex;
+  }
 
 .todo {
   border-bottom: 1px solid #f2f2f2;
-}
-
-.todo:hover {
-  border-left-color: #0366d6;
 }
 
 .todo--highlight {
@@ -62,15 +62,15 @@ body {
 
 .todo__add {
     background-color: transparent;
+    border: 0;
     font-size: 16px;
     font-weight: 500;
-    margin: 2px 0;
-    border: 0;
+    letter-spacing: -0.25px;
+    margin: 2px 0 0 26px;
     padding: 14px 0;
+    text-indent: 10px;
     white-space: nowrap;
     width: 100%;
-    letter-spacing: -0.25px;
-    text-indent: 10px;
 }
 
   .todo__add:focus {
@@ -80,6 +80,11 @@ body {
   .todo__add::placeholder {
     color: #0366d6;
   }
+
+.todos:empty {
+  /*height: 100px;
+  background-color: yellow;*/
+}
 
 .todo__title {
   background-color: transparent;
@@ -118,11 +123,11 @@ body {
     background-color: #e8ebf1;
   }
 
-.todo--complete .todo__title {
+.todo--completed .todo__title {
   opacity: .5;
 }
 
-.todo--complete .todo__title {
+.todo--completed .todo__title {
   text-decoration: line-through;
 }
 
@@ -158,21 +163,23 @@ body {
   margin-left: 10px;
 }
 
-.todo--complete .todo__remove {
+.todo--completed .todo__remove {
 }
 
 .todo__due-at {
   white-space: nowrap;
   background-color: #fde499;
-  border-radius: 3px;
+  border-radius: 100px;
   font-size: 14px;
-  padding: 4px 6px;
+  padding: 4px 12px;
   color: rgba(0,0,0,.75);
   margin-left: 6px;
   user-select: none;
+  width: 86px;
+  text-align: center;
 }
 
-  .todo--complete .todo__due-at {
+  .todo--completed .todo__due-at {
     background-color: #e7e7e7;
     color: #969696;
   }
@@ -189,7 +196,7 @@ body {
   margin-bottom: 40px;
 }
 
-/*Ensure todo child elements are no drop targets for drag / drop sorting*/
+/*Ensure todo child elements are not drop targets for drag / drop sorting*/
 .todos--drag-active .todo * {
   pointer-events: none;
 }
@@ -282,7 +289,7 @@ form {
   transition-property: opacity, height;
   transition-duration: 150ms;
   transition-timing-function: ease-out;
-  height: 20px;
+  height: 1px;
 }
 
 @keyframes todo-highlight {
