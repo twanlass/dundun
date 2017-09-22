@@ -16,6 +16,7 @@ import _ from 'lodash';
 import chrono from 'chrono-node';
 import { CSSTransitionGroup } from 'react-transition-group';
 import classNames from 'classnames';
+import Autolinker from 'autolinker'
 import './App.css';
 
 const Title = ({ todoCount }) => {
@@ -98,18 +99,23 @@ const Todo = ({ todo, nowEditing, remove, done, move, edit, dragStart, dragEnd }
     edit(null, '')
   }
 
+  let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'smart' }} );
+
   let todoClasses = classNames(
     'todo',
     {'todo--highlight': todo.id === nowEditing},
+    {'todo--event': todo.isEvent},
     {'todo--completed': todo.completed}
   );
+
+  // <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onClick={() => { onClick()} }/>
 
   return (
     <div className={todoClasses} draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
       <label id={todo.id}>
         <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.completed} />
       </label>
-      <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} onKeyUp={(event) => { onEnter(todo.id, event)} } onClick={() => { onClick()} }/>
+      <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }}></div>
       <TodoDueAt todo={todo} />
       <TodoFutureDay todo={todo} />
       <div className="todo__actions">
@@ -202,10 +208,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
     )
   } else {
     return (
-      <div className="todo-list-section">
         <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={futureTitle} viewId={'future'} />
-        <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="future" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}></CSSTransitionGroup>
-      </div>
     )
   }
 }
