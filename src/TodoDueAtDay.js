@@ -8,7 +8,7 @@ export default class TodoDueAtDay extends React.Component {
 
     if (isFuture(todo)) {
       return (
-        <div className="todo__due-at">{Moment(todo.dueAt).format('dddd MMM Do')}</div>
+        <div className="todo__due-at">{Moment(todo.dueAt).format('ddd MMM DD')}</div>
       )
     } else {
       return null;

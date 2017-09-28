@@ -85,8 +85,10 @@ const TodoFutureDay = ({ todo }) => {
 }
 
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
+  let titleString = (visible) ? '- ' + title : '+ ' + title
+
   return (
-    <div className={"todo-list-section__header " + (visible ? '' : 'todo-list-section__header--hidden' )} onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: title }}></div>
+    <div className="todo-list-section__header " onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: titleString }}></div>
   );
 };
 
@@ -164,17 +166,24 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
   }
 }
 
-const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, remove, done, showDone, move, edit }) => {
+const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
   let otherNotDone = todos.filter(isPast).filter(isNotComplete).sort(sortDesc);
+
+  let todoListClasses = classNames(
+    {'todos--drag-active': nowDragging}
+  );
 
   if (visible) {
     if (otherNotDone.length) {
       return (
         <div className="todo-list-section">
           <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Backlog'} viewId={'someday'} />
-          {otherNotDone.map(todo => (
-            <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
-          ))}
+
+          <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
+            {otherNotDone.map(todo => (
+              <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
+            ))}
+          </CSSTransitionGroup>
         </div>
       );
     } else {
@@ -324,21 +333,22 @@ class TodoApp extends React.Component {
     this.saveState(remainder);
   }
 
-  handleMove(id) {
-    const remainder = this.state.data.filter(todo => {
-      if (todo.id === id) {
-        // If todo is from the past (someday), then move it to today
-        if (Moment(todo.dueAt).isBefore(Moment().valueOf(), 'day')) {
-          todo.dueAt = Moment().valueOf()
-        } else {
-          todo.dueAt = Moment(todo.dueAt).add(1, 'd').valueOf()
-        }
-        return todo;
-      }
-      if (todo.id !== id) return todo;
-    });
-    this.setState({ data: remainder });
-    this.saveState(remainder);
+  handleMove(id, list) {
+    // list: future, today, past
+    // @todo preserve dueAt time if exists
+    let data = this.state.data;
+    let todoIndex = data.findIndex(todo => todo.id === id);
+
+    if (list === 'future') {
+      data[todoIndex].dueAt = Moment().add(1, 'd').valueOf();
+    } else if (list === 'today') {
+      data[todoIndex].dueAt = Moment().valueOf();
+    } else if (list === 'past') {
+      data[todoIndex].dueAt = Moment().subtract(1, 'd').valueOf();
+    }
+
+    this.setState({ data: data });
+    this.saveState(data);
   }
 
   onEdit (id) {
@@ -403,7 +413,7 @@ class TodoApp extends React.Component {
 
     // If we're dragging from the today list to the future list, 'move' the todo as well
     if (origin != destination) {
-      this.handleMove(from)
+      this.handleMove(from, destination)
     }
 
     data.splice(toIndex, 0, data.splice(fromIndex, 1)[0]);
@@ -564,10 +574,16 @@ class TodoApp extends React.Component {
           showDone={this.state.showDone}
           todos={this.state.data}
           nowEditing={this.state.nowEditing}
+          nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
           edit={this.handleEdit.bind(this)}
+          onEdit={this.onEdit.bind(this)}
+          add={this.handleAdd.bind(this)}
+          dragStart={this.handleDragStart.bind(this)}
+          dragEnd={this.handleDragEnd.bind(this)}
+          dragOver={this.handleDragOver.bind(this)}
         />
         <TodoListDones
           visible={this.state.donesVisible}

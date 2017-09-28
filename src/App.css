@@ -46,7 +46,7 @@ body {
   border-radius: 0 3px 3px 0;
   content: "";
   height: 80%;
-  left: -20px;
+  left: 0px;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -251,7 +251,7 @@ body {
   color: #333;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 500;
   letter-spacing: 0;
   margin-bottom: 0;
   padding-bottom: 10px;
@@ -263,10 +263,6 @@ body {
 
 .todo-list-section__header:hover {
   color: #333;
-}
-
-.todo-list-section__header--hidden {
-  color: #ccc;
 }
 
 .todo-list-section__header span {

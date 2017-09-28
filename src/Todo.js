@@ -36,11 +36,11 @@ export default class Todo extends React.Component {
 
     if (todo.id === nowEditing) {
       return (
-        <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }}/>
+        <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }} />
       )
     } else {
       return (
-        <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }}></div>
+        <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }} onClick={() => {this.onEdit()}}></div>
       )
     }
   }
@@ -56,7 +56,7 @@ export default class Todo extends React.Component {
     );
 
     return (
-      <div className={todoClasses} draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id} onClick={() => {this.onEdit()}}>
+      <div className={todoClasses} draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
         <label id={todo.id}>
           <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.completed} />
         </label>
