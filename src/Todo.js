@@ -25,7 +25,12 @@ export default class Todo extends React.Component {
     input.setSelectionRange(strLength, strLength);
   }
 
-  onEdit() {
+  onEdit(e) {
+    // Prevent edit if clicking on a link in a todo title
+    if (e.target.tagName.toLowerCase() === 'a') {
+      return;
+    }
+
     const {todo, onEdit} = this.props;
     onEdit(todo.id)
   }
@@ -40,7 +45,7 @@ export default class Todo extends React.Component {
       )
     } else {
       return (
-        <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }} onClick={() => {this.onEdit()}}></div>
+        <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }} onClick={(e) => {this.onEdit(e)}}></div>
       )
     }
   }
