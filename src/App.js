@@ -6,6 +6,7 @@
 // task notes, sub-tasks
 // Create sub tasks by comma, i.e. "pricing experiement: paper, update designs, setup call"
 // Keyboard editing up / down, enter, e to close archive
+// Data struct: rename protected props with underscore (like _id)
 
 import React from 'react';
 import Moment from 'moment';
@@ -15,6 +16,7 @@ import { CSSTransitionGroup } from 'react-transition-group';
 import classNames from 'classnames';
 import './App.css';
 import Todo from './Todo.js';
+import TodoForm from './TodoForm.js';
 import {isFuture, isToday, isPast, isCompletedYesterday, isComplete, isNotComplete, sortDesc} from './helpers.js';
 
 const Title = ({ todoCount }) => {
@@ -47,31 +49,6 @@ const TodoListOptions = ({showDone, toggleShowDone}) => {
     </div>
   )
 }
-
-const TodoForm = ({ add }) => {
-  let input;
-
-  return (
-    <div className="todo todo--add">
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          add(input.value);
-          input.value = "";
-        }}
-      >
-        <input
-          className="todo__add"
-          placeholder="Add a new todo..."
-          autoFocus={true}
-          ref={node => {
-            input = node;
-          }}
-        />
-      </form>
-    </div>
-  );
-};
 
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
   let titleString = (visible) ? '- ' + title : '+ ' + title
@@ -113,7 +90,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
             <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
           ))}
         </CSSTransitionGroup>
-        <TodoForm add={add} />
+        <TodoForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={null} />
       </div>
     )
   } else {
@@ -126,6 +103,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
 const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
   let todayDone = todos.filter(isToday).filter(isComplete);
   let todayNotDone = todos.filter(isToday).filter(isNotComplete);
+  let lastTodoId = todayNotDone.length ? todayNotDone[todayNotDone.length - 1].id : null;
   let todayAllTodos = [];
 
   if(showDone) {
@@ -150,7 +128,7 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
             <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
           ))}
         </CSSTransitionGroup>
-        <TodoForm add={add} />
+        <TodoForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={lastTodoId} />
       </div>
     )
   } else {
