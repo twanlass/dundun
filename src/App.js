@@ -76,8 +76,13 @@ const TodoForm = ({ add }) => {
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
   let titleString = (visible) ? '- ' + title : '+ ' + title
 
+  let todoListHeaderClasses = classNames(
+    'todo-list-section__header',
+    'todo-list-section__header--' + viewId
+  );
+
   return (
-    <div className="todo-list-section__header " onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: titleString }}></div>
+    <div className={todoListHeaderClasses} onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: titleString }}></div>
   );
 };
 
@@ -92,7 +97,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
     futureAllTodos = futureNotDone;
   }
 
-  let futureTitle = futureNotDone.length ? 'Upcoming (' + futureNotDone.length + ')' : 'Upcoming'
+  let futureTitle = futureNotDone.length ? 'Upcoming <span>' + futureNotDone.length + '</span>' : 'Upcoming'
 
   let todoListClasses = classNames(
     'todos todos--future',
@@ -158,6 +163,8 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
 const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
   let otherNotDone = todos.filter(isPast).filter(isNotComplete).sort(sortDesc);
 
+  let pastTitle = otherNotDone.length ? 'Backlog <span>' + otherNotDone.length + '</span>' : 'Backlog'
+
   let todoListClasses = classNames(
     {'todos--drag-active': nowDragging}
   );
@@ -166,7 +173,7 @@ const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, 
     if (otherNotDone.length) {
       return (
         <div className="todo-list-section">
-          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Backlog'} viewId={'someday'} />
+          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={pastTitle} viewId={'someday'} />
 
           <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
             {otherNotDone.map(todo => (
@@ -180,7 +187,7 @@ const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, 
     }
   } else {
     return (
-      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Backlog'} viewId={'someday'} />
+      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={pastTitle} viewId={'someday'} />
     )
   }
 }
@@ -199,7 +206,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done
     if (dones.length) {
       return (
         <div className="todo-list-section">
-          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Dones (' + dones.length + ')' } viewId={'dones'} />
+          <TodoListHeader visible={visible} toggleVisible={toggleVisible} title="Done" viewId={'dones'} />
           Yesterday
           {donesYesterday.map(todo => (
             <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
@@ -211,7 +218,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done
     }
   } else {
     return (
-      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={'Dones (' + dones.length + ')' } viewId={'dones'} />
+      <TodoListHeader visible={visible} toggleVisible={toggleVisible} title="Done" viewId={'dones'} />
     )
   }
 }
