@@ -13,10 +13,9 @@ import _ from 'lodash';
 import chrono from 'chrono-node';
 import { CSSTransitionGroup } from 'react-transition-group';
 import classNames from 'classnames';
-import Autolinker from 'autolinker'
 import './App.css';
 import Todo from './Todo.js';
-import {isFuture, isToday, isPast, isCompletedToday, isCompletedYesterday, isComplete, isNotComplete, sortDesc, sortAsc} from './helpers.js';
+import {isFuture, isToday, isPast, isCompletedYesterday, isComplete, isNotComplete, sortDesc} from './helpers.js';
 
 const Title = ({ todoCount }) => {
   return (
@@ -73,16 +72,6 @@ const TodoForm = ({ add }) => {
     </div>
   );
 };
-
-const TodoFutureDay = ({ todo }) => {
-  if (isFuture(todo)) {
-    return (
-      <div className="todo__due-at">{Moment(todo.dueAt).format('dddd')}</div>
-    )
-  } else {
-    return null;
-  }
-}
 
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
   let titleString = (visible) ? '- ' + title : '+ ' + title
@@ -356,26 +345,16 @@ class TodoApp extends React.Component {
   }
 
   handleEdit (id, value) {
-    let nowEditingId = null;
+    let data = this.state.data;
+    let todoIndex = data.findIndex(todo => todo.id === id);
 
-    const remainder = this.state.data.filter(todo => {
-      // Is this the todo we need to edit?
-      if (todo.id === id) {
-        // Has todo text changed?
-        if (todo.text !== value) {
-          todo.text = value;
-          nowEditingId = todo.id;
-          return todo;
-        } else {
-          return todo;
-          nowEditingId = null;
-        }
-      } else {
-        return todo;
-      }
-    });
-    this.setState({ data: remainder, nowEditing: nowEditingId });
-    this.saveState(remainder);
+    // If the todo text has changed...
+    if (data[todoIndex].text !== value) {
+      data[todoIndex].text = value;
+    }
+
+    this.setState({ data: data, nowEditing: null });
+    this.saveState(data);
   }
 
   handleDragStart(e) {
@@ -383,7 +362,7 @@ class TodoApp extends React.Component {
 
     // Get the list we're dragging from based on the currently draged todo
     let data = this.state.data;
-    let draggedTodo = data.filter(todo => todo.id == e.currentTarget.dataset.id);
+    let draggedTodo = data.filter(todo => todo.id === e.currentTarget.dataset.id);
     let nowDraggingFrom = draggedTodo.some(isToday) ? 'today' : ' future';
 
     this.setState({ nowDragging: true, nowDraggingFrom: nowDraggingFrom });
@@ -412,7 +391,7 @@ class TodoApp extends React.Component {
     let destination = this.state.nowDraggingTo;
 
     // If we're dragging from the today list to the future list, 'move' the todo as well
-    if (origin != destination) {
+    if (origin !== destination) {
       this.handleMove(from, destination)
     }
 
@@ -436,12 +415,12 @@ class TodoApp extends React.Component {
     }
 
     // Prevent state update (and render) if we're still dragging around in the same list...
-    if (prevDraggingTo != nowDraggingTo) {
+    if (prevDraggingTo !== nowDraggingTo) {
       this.setState({ nowDraggingTo: nowDraggingTo });
     }
 
     // If we're dragging over a placeholder, don't update the target yet
-    if(e.target.className == "todo--placeholder") return;
+    if(e.target.className === "todo--placeholder") return;
     this.over = e.target;
 
     // Check if we're dropping beyond the start or end of the list
@@ -460,10 +439,7 @@ class TodoApp extends React.Component {
   }
 
   todoCount() {
-    const remainder = this.state.data.filter(todo => {
-      if (!todo.completed) return todo;
-    });
-    return remainder.length;
+    return this.state.data.filter(isComplete).length
   }
 
   toggleShowDone(){
@@ -489,7 +465,7 @@ class TodoApp extends React.Component {
     if (localStorage.getItem('todos')){
       return JSON.parse(localStorage.getItem('todos'));
     } else {
-      null;
+      return null;
     }
   }
 

@@ -7,7 +7,7 @@ import TodoDueAtDay from './TodoDueAtDay.js';
 export default class Todo extends React.Component {
 
   onEnter(id, e) {
-    const {todo, edit, onEdit} = this.props;
+    const {edit, onEdit} = this.props;
 
     if (e.keyCode === 13) {
       edit(id, e.target.value)
@@ -37,7 +37,9 @@ export default class Todo extends React.Component {
 
   renderTitle() {
     const {todo, nowEditing} = this.props;
-    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} );
+
+    // Auto-link title + wrap any code in <code/> blocks
+    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'');
 
     if (todo.id === nowEditing) {
       return (
@@ -51,7 +53,7 @@ export default class Todo extends React.Component {
   }
 
   render() {
-    const {todo, nowEditing, remove, done, move, edit, dragStart, dragEnd} = this.props;
+    const {todo, nowEditing, remove, done, dragStart, dragEnd} = this.props;
 
     let todoClasses = classNames(
       'todo',
