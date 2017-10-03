@@ -51,21 +51,20 @@ const TodoListOptions = ({showDone, toggleShowDone}) => {
 }
 
 const TodoListHeader = ({ visible, toggleVisible, title, viewId }) => {
-  let titleString = (visible) ? '- ' + title : '+ ' + title
-
   let todoListHeaderClasses = classNames(
-    'todo-list-section__header',
-    'todo-list-section__header--' + viewId
+    'todo-list__header',
+    'todo-list__header--' + viewId
   );
 
   return (
-    <div className={todoListHeaderClasses} onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: titleString }}></div>
+    <div className={todoListHeaderClasses} onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: title }}></div>
   );
 };
 
 const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
   let futureDone = todos.filter(isFuture).filter(isComplete);
   let futureNotDone = todos.filter(isFuture).filter(isNotComplete);
+  let lastTodoId = futureNotDone.length ? futureNotDone[futureNotDone.length - 1].id : null;
   let futureAllTodos = [];
 
   if(showDone) {
@@ -76,21 +75,26 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
 
   let futureTitle = futureNotDone.length ? 'Upcoming <span>' + futureNotDone.length + '</span>' : 'Upcoming'
 
-  let todoListClasses = classNames(
-    'todos todos--future',
+  let todosClasses = classNames(
+    'todos',
     {'todos--drag-active': nowDragging}
   );
 
+  let todoListClasses = classNames(
+    'todo-list',
+    {'todo-list--active': visible}
+  )
+
   if (visible) {
     return (
-      <div className="todo-list-section">
+      <div className={todoListClasses}>
         <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={futureTitle} viewId={'future'} />
-        <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="future" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
+        <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="future" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
           {futureAllTodos.map(todo => (
             <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
           ))}
         </CSSTransitionGroup>
-        <TodoForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={null} />
+        <TodoForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={lastTodoId} />
       </div>
     )
   } else {
@@ -114,16 +118,21 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
 
   let todayTitle = todayNotDone.length ? 'Today <span>' + todayNotDone.length + '</span>' : 'Today'
 
-  let todoListClasses = classNames(
-    'todos todos--today',
+  let todosClasses = classNames(
+    'todos',
     {'todos--drag-active': nowDragging}
   );
 
+  let todoListClasses = classNames(
+    'todo-list',
+    {'todo-list--active': visible}
+  )
+
   if (visible) {
     return (
-      <div className="todo-list-section">
+      <div className={todoListClasses}>
         <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={todayTitle} viewId={'today'} />
-        <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="today" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
+        <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="today" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
           {todayAllTodos.map(todo => (
             <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
           ))}
@@ -143,17 +152,22 @@ const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, 
 
   let pastTitle = otherNotDone.length ? 'Backlog <span>' + otherNotDone.length + '</span>' : 'Backlog'
 
-  let todoListClasses = classNames(
+  let todosClasses = classNames(
+    'todos',
     {'todos--drag-active': nowDragging}
   );
+
+  let todoListClasses = classNames(
+    'todo-list',
+    {'todo-list--active': visible}
+  )
 
   if (visible) {
     if (otherNotDone.length) {
       return (
-        <div className="todo-list-section">
+        <div className={todoListClasses}>
           <TodoListHeader visible={visible} toggleVisible={toggleVisible} title={pastTitle} viewId={'someday'} />
-
-          <CSSTransitionGroup transitionName="todo-" component="div" className={todoListClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
+          <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
             {otherNotDone.map(todo => (
               <Todo todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
             ))}
@@ -183,7 +197,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done
   if (visible) {
     if (dones.length) {
       return (
-        <div className="todo-list-section">
+        <div className="todo-list">
           <TodoListHeader visible={visible} toggleVisible={toggleVisible} title="Done" viewId={'dones'} />
           Yesterday
           {donesYesterday.map(todo => (
@@ -347,8 +361,8 @@ class TodoApp extends React.Component {
 
     // Get the list we're dragging from based on the currently draged todo
     let data = this.state.data;
-    let draggedTodo = data.filter(todo => todo.id === e.currentTarget.dataset.id);
-    let nowDraggingFrom = draggedTodo.some(isToday) ? 'today' : ' future';
+    let draggedTodo = data.filter(todo => todo.id === Number(e.currentTarget.dataset.id));
+    let nowDraggingFrom = draggedTodo.some(isToday) ? 'today' : 'future';
 
     this.setState({ nowDragging: true, nowDraggingFrom: nowDraggingFrom });
 
@@ -377,6 +391,8 @@ class TodoApp extends React.Component {
 
     // If we're dragging from the today list to the future list, 'move' the todo as well
     if (origin !== destination) {
+      console.log(origin)
+      console.log(destination)
       this.handleMove(from, destination)
     }
 
