@@ -1,14 +1,20 @@
 import React from 'react';
 import classNames from 'classnames';
 import './listHeader.css';
+import '../../css/todo-icon-font.css';
 
 export default class ListHeader extends React.Component {
   renderToggle() {
-    const {visible, showDone, toggleShowDone} = this.props;
+    let {visible, showDone, toggleShowDone} = this.props;
+
+    let toggleClasses = classNames(
+      'ico-filter',
+      {'ico-filter--active': !showDone}
+    );
 
     if (visible) {
       return (
-        <input type="checkbox" defaultChecked={showDone} onClick={() => { toggleShowDone(); }} />
+        <i className={toggleClasses} onClick={() => { toggleShowDone(); }}></i>
       )
     } else {
       return null;

@@ -1,5 +1,6 @@
 import React from 'react';
 import './listItemForm.css';
+import '../../css/todo-icon-font.css';
 
 export default class listItemForm extends React.Component {
   onEditPrevious(e) {
@@ -30,6 +31,7 @@ export default class listItemForm extends React.Component {
     return (
       <div className="todo">
         <form onSubmit={(e) => { this.onAdd(e) }}>
+          <i className="ico-return"></i>
           <input
             className="list-item-form"
             placeholder="Add a new todo..."

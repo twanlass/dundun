@@ -4,17 +4,13 @@ import _ from 'lodash';
 import chrono from 'chrono-node';
 import { CSSTransitionGroup } from 'react-transition-group';
 import classNames from 'classnames';
-import './App.css';
+import './css/app.css';
+import './css/todo-icon-font.css';
+import Nav from './components/nav/nav.js';
 import ListItem from './components/listItem/listItem.js';
 import ListItemForm from './components/listItemForm/listItemForm.js';
 import ListHeader from './components/listHeader/listHeader.js'
 import {isFuture, isToday, isPast, isCompletedYesterday, isComplete, isNotComplete, sortDesc} from './helpers.js';
-
-const Title = ({ todoCount }) => {
-  return (
-      <div className="title">Todos</div>
-  );
-};
 
 const TodoListDebugOptions = ({showDebug, updateDataStruct, resetData}) => {
   if (showDebug) {
@@ -406,10 +402,6 @@ class TodoApp extends React.Component {
     }
   }
 
-  todoCount() {
-    return this.state.data.filter(isComplete).length
-  }
-
   toggleShowDone(){
     let showDone = !this.state.showDone;
     this.setState({ showDone: showDone });
@@ -435,6 +427,11 @@ class TodoApp extends React.Component {
     } else {
       return null;
     }
+  }
+
+  setWindowTitle() {
+    let todos = this.state.data.filter(isToday).filter(isNotComplete).length;
+    document.title = `Todos (${todos})`;
   }
 
   updateDataStruct() {
@@ -466,14 +463,14 @@ class TodoApp extends React.Component {
   }
 
   render() {
+    this.setWindowTitle()
+
     return (
       <div className="todos-app">
-        <div className="header">
-        <Title todoCount={this.todoCount()} />
+        <Nav />
         <TodoListDebugOptions showDebug={this.state.showDebug}
                               resetData={this.resetData.bind(this)}
                               updateDataStruct={this.updateDataStruct.bind(this)} />
-        </div>
         <TodoListToday
           visible={this.state.todayVisible}
           toggleVisible={this.toggleVisible.bind(this)}
