@@ -1,0 +1,20 @@
+.list-item-form {
+    background-color: transparent;
+    border: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    text-indent: 10px;
+    white-space: nowrap;
+    width: 100%;
+    font-family: inherit;
+    color: #333;
+    height: 38px;
+}
+
+  .list-item-form:focus {
+    outline: 0;
+  }
+
+  .list-item-form::placeholder {
+    color: #999;
+  }

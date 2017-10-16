@@ -1,0 +1,179 @@
+.todo,
+.todo--placeholder {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-right: 20px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.todo--placeholder {
+  background-color: #f2f2f2;
+  height: 38px;
+}
+
+.todo--event:before {
+  background-color: #fde499;
+  border-radius: 0 3px 3px 0;
+  content: "";
+  height: 80%;
+  left: 0px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+}
+
+.todo--completed.todo--event:before {
+  background-color: #e7e7e7;
+}
+
+.todo__actions {
+  display: none;
+}
+
+  .todo:hover .todo__actions {
+    display: flex;
+  }
+
+.todo {
+  padding-top: 0;
+  padding-bottom: 0;
+  transition-property: padding-top, padding-bottom, background-color;
+  transition-duration: .1s;
+  transition-timing-function: ease-in;
+  background-color: #fff;
+}
+
+.todo--editing {
+  background-color: #f9f9f9;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  transition-property: padding-top, padding-bottom, background-color;
+  transition-duration: .1s;
+  transition-timing-function: ease-in;
+}
+
+.todo--highlight {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: todo-highlight;
+  animation-timing-function: ease-in-out;
+}
+
+.todos {
+  margin-top: 6px;
+}
+
+.todo__title {
+  background-color: transparent;
+  border-radius: 3px;
+  border: 0;
+  color: #555;
+  font-family: inherit;
+  font-size: 16px;
+  margin-right: 10px;
+  margin: 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+  .todo__title a {
+    text-decoration: none;
+    color: #0366d6;
+    background-color: #eff5fb;
+    border-radius: 100px;
+    padding: 2px 10px;
+  }
+
+    .todo__title a:hover {
+      background-color: #daedff;
+    }
+
+  .todo__title code {
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 3px;
+  }
+
+  .todo--completed code {
+    color: #555;
+    background-color: #f2f2f2;
+  }
+
+  .todos--today .todo:nth-child(1) .todo__title {
+    color: #000;
+  }
+
+  .todos--today .todo:nth-child(2) .todo__title {
+    color: #333;
+  }
+
+  .todos--today .todo:nth-child(3) .todo__title {
+    color: #333;
+  }
+
+  .todo__title:focus {
+    outline: none;
+  }
+
+.todo--completed .todo__title {
+  opacity: .5;
+}
+
+.todo--completed .todo__title {
+  text-decoration: line-through;
+}
+
+.todo__remove,
+.todo__move {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  color: #ccc;
+  cursor: pointer;
+  opacity: 0;
+}
+
+.todo:hover .todo__remove,
+.todo:hover .todo__move {
+  opacity: 1;
+}
+
+.todo__remove:hover,
+.todo__move:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.todo__remove {
+  margin-left: auto;
+}
+
+.todo__move {
+  margin-left: 10px;
+}
+
+.todo-list-options {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.todo-list--active {
+  margin-bottom: auto;
+}
+
+/*Ensure todo child elements are not drop targets for drag / drop sorting*/
+.todos--drag-active .todo * {
+  pointer-events: none;
+}

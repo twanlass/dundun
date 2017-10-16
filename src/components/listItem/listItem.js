@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import Autolinker from 'autolinker'
-import TodoDueAtTime from './TodoDueAtTime.js';
-import TodoDueAtDay from './TodoDueAtDay.js';
+import Autolinker from 'autolinker';
+import ListItemDate from '../listItemDate/listItemDate.js';
+import './listItem.css';
 
-export default class Todo extends React.Component {
+export default class ListItem extends React.Component {
 
   onEnter(id, e) {
     const {edit, onEdit} = this.props;
@@ -68,8 +68,7 @@ export default class Todo extends React.Component {
           <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.completed} />
         </label>
         {this.renderTitle()}
-        <TodoDueAtTime todo={todo} />
-        <TodoDueAtDay todo={todo} />
+        <ListItemDate todo={todo} />
         <div className="todo__actions">
           <div className="todo__remove" onClick={() => { remove(todo.id); }}>&times;</div>
         </div>

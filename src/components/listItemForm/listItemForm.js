@@ -1,6 +1,7 @@
 import React from 'react';
+import './listItemForm.css';
 
-export default class TodoForm extends React.Component {
+export default class listItemForm extends React.Component {
   onEditPrevious(e) {
     const {onEdit, lastTodoId} = this.props;
 
@@ -27,10 +28,10 @@ export default class TodoForm extends React.Component {
     let input;
 
     return (
-      <div className="todo todo--add">
+      <div className="todo">
         <form onSubmit={(e) => { this.onAdd(e) }}>
           <input
-            className="todo__add"
+            className="list-item-form"
             placeholder="Add a new todo..."
             onClick={(e) => {this.onClick()}}
             onKeyUp={(e) => { this.onEditPrevious(e) }}
