@@ -33,8 +33,21 @@
   display: none;
 }
 
-  .todo:hover .todo__actions {
-    display: flex;
+.todo__actions--active {
+  display: flex;
+}
+
+  .todo__actions .ico-trash {
+    font-size: 16px;
+    color: #969698;
+    padding: 10px 0 10px 10px;
+    cursor: pointer;
+    transition: color .15s;
+  }
+
+  .todo__actions .ico-trash:hover {
+    color: #333;
+    transition: color .15s;
   }
 
 .todo {
@@ -128,38 +141,6 @@
 
 .todo--completed .todo__title {
   text-decoration: line-through;
-}
-
-.todo__remove,
-.todo__move {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f9f9f9;
-  color: #ccc;
-  cursor: pointer;
-  opacity: 0;
-}
-
-.todo:hover .todo__remove,
-.todo:hover .todo__move {
-  opacity: 1;
-}
-
-.todo__remove:hover,
-.todo__move:hover {
-  background-color: #333;
-  color: #fff;
-}
-
-.todo__remove {
-  margin-left: auto;
-}
-
-.todo__move {
-  margin-left: 10px;
 }
 
 .todo-list-options {

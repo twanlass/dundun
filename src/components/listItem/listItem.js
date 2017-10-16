@@ -62,15 +62,23 @@ export default class ListItem extends React.Component {
       {'todo--completed': todo.completed}
     );
 
+    let todoActionClasses = classNames(
+      'todo__actions',
+      {'todo__actions--active': todo.id === nowEditing}
+    );
+
+    // If the item id we're editing is null, allow dragging
+    let draggable = nowEditing ? false : true;
+
     return (
-      <div className={todoClasses} draggable="true" onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
+      <div className={todoClasses} draggable={draggable} onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
         <label id={todo.id}>
           <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.completed} />
         </label>
         {this.renderTitle()}
         <ListItemDate todo={todo} />
-        <div className="todo__actions">
-          <div className="todo__remove" onClick={() => { remove(todo.id); }}>&times;</div>
+        <div className={todoActionClasses}>
+          <i className="ico-trash" onClick={() => { remove(todo.id); }}></i>
         </div>
       </div>
     );

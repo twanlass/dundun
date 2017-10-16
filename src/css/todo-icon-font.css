@@ -1,9 +1,9 @@
 @font-face {
   font-family: 'todo-icon-font';
   src:
-    url('../fonts/todo-icon-font.ttf?gf5ws8') format('truetype'),
-    url('../fonts/todo-icon-font.woff?gf5ws8') format('woff'),
-    url('../fonts/todo-icon-font.svg?gf5ws8#todo-icon-font') format('svg');
+    url('../fonts/todo-icon-font.ttf?te0i8t') format('truetype'),
+    url('../fonts/todo-icon-font.woff?te0i8t') format('woff'),
+    url('../fonts/todo-icon-font.svg?te0i8t#todo-icon-font') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -23,12 +23,18 @@ i {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ico-re-order:before {
+  content: "\e903";
+}
+.ico-trash:before {
+  content: "\e904";
+}
 .ico-plus:before {
   content: "\e900";
 }
 .ico-return:before {
   content: "\e901";
 }
-.ico-filter:before {
+.ico-sort:before {
   content: "\e902";
 }
