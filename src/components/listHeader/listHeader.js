@@ -22,11 +22,12 @@ export default class ListHeader extends React.Component {
   }
 
   render() {
-    const {toggleVisible, title, viewId} = this.props;
+    let {visible, toggleVisible, title, viewId} = this.props;
 
     let todoListHeaderClasses = classNames(
       'list-header',
-      'list-header--' + viewId
+      'list-header--' + viewId,
+      {'list-header--active': visible === true}
     );
 
     return (

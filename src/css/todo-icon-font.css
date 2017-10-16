@@ -35,6 +35,6 @@ i {
 .ico-return:before {
   content: "\e901";
 }
-.ico-sort:before {
+.ico-filter:before {
   content: "\e902";
 }

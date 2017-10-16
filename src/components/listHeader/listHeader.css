@@ -17,10 +17,11 @@
   transition: color .15s;
 }
 
-.todo-list--active .list-header {
+.list-header--active {
   color: #333;
 }
 
+.list-header--active:hover,
 .list-header:hover {
   transition: color .15s;
   color: #333;
@@ -36,7 +37,7 @@
   margin-left: 4px;
 }
 
-.todo-list--active .list-header span {
+.list-header--active span {
   background-color: #9013FE;
   color: #fff;
 }

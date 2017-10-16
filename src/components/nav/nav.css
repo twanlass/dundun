@@ -25,6 +25,7 @@
 .nav-item--active,
 .nav-item--active:hover {
   color: #9013FE;
+  cursor: default;
 }
 
 .nav-item--active:after {
