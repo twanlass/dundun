@@ -37,7 +37,8 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
     futureAllTodos = futureNotDone;
   }
 
-  let futureTitle = futureNotDone.length ? 'Upcoming <span>' + futureNotDone.length + '</span>' : 'Upcoming'
+  let futureTitle = 'Upcoming'
+  let futureBadgeCount = futureNotDone.length
 
   let todosClasses = classNames(
     'todos',
@@ -52,7 +53,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
   if (visible) {
     return (
       <div className={todoListClasses}>
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} viewId={'future'} />
+        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} badgeCount={futureBadgeCount} viewId={'future'} />
         <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="future" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
           {futureAllTodos.map(todo => (
             <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
@@ -63,7 +64,7 @@ const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging
     )
   } else {
     return (
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} viewId={'future'} />
+        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} badgeCount={futureBadgeCount} viewId={'future'} />
     )
   }
 }
@@ -80,7 +81,8 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
     todayAllTodos = todayNotDone;
   }
 
-  let todayTitle = todayNotDone.length ? 'Today <span>' + todayNotDone.length + '</span>' : 'Today'
+  let todayTitle = 'today'
+  let todayBadgeCount = todayNotDone.length;
 
   let todosClasses = classNames(
     'todos',
@@ -95,7 +97,7 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
   if (visible) {
     return (
       <div className={todoListClasses}>
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} viewId={'today'} />
+        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} badgeCount={todayBadgeCount} viewId={'today'} />
         <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="today" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
           {todayAllTodos.map(todo => (
             <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
@@ -106,7 +108,7 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
     )
   } else {
     return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} viewId={'today'} />
+      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} badgeCount={todayBadgeCount} viewId={'today'} />
     )
   }
 }
@@ -114,7 +116,8 @@ const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging,
 const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, toggleShowDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
   let otherNotDone = todos.filter(isPast).filter(isNotComplete).sort(sortDesc);
 
-  let pastTitle = otherNotDone.length ? 'Later <span>' + otherNotDone.length + '</span>' : 'later'
+  let pastTitle = 'later';
+  let pastBadgeCount = otherNotDone.length;
 
   let todosClasses = classNames(
     'todos',
@@ -130,7 +133,7 @@ const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, 
     if (otherNotDone.length) {
       return (
         <div className={todoListClasses}>
-          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} viewId={'someday'} />
+          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} badgeCount={pastBadgeCount} viewId={'someday'} />
           <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
             {otherNotDone.map(todo => (
               <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
@@ -143,7 +146,7 @@ const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, 
     }
   } else {
     return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} viewId={'someday'} />
+      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} badgeCount={pastBadgeCount} viewId={'someday'} />
     )
   }
 }
@@ -162,7 +165,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done
     if (dones.length) {
       return (
         <div className="todo-list">
-          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" viewId={'dones'} />
+          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" badgeCount={false} viewId={'dones'} />
           Yesterday
           {donesYesterday.map(todo => (
             <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
@@ -174,7 +177,7 @@ const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done
     }
   } else {
     return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" viewId={'dones'} />
+      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" badgeCount={false} viewId={'dones'} />
     )
   }
 }

@@ -21,6 +21,18 @@ export default class ListHeader extends React.Component {
     }
   }
 
+  renderBadgeCount() {
+    let {badgeCount} = this.props;
+
+    if (badgeCount) {
+      return(
+        <div className="list-header__title-badge">{badgeCount}</div>
+      )
+    } else {
+      return null;
+    }
+  }
+
   render() {
     let {visible, toggleVisible, title, viewId} = this.props;
 
@@ -32,7 +44,9 @@ export default class ListHeader extends React.Component {
 
     return (
       <div className={todoListHeaderClasses}>
-        <div onClick={() => { toggleVisible({viewId}); }} dangerouslySetInnerHTML={{ __html: title }}></div>
+        <div className="list-header__title" onClick={() => { toggleVisible({viewId}); }}>
+          {title}{this.renderBadgeCount()}
+        </div>
         {this.renderToggle()}
       </div>
     )
