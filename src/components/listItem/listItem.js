@@ -10,6 +10,9 @@ export default class ListItem extends React.Component {
     const {edit, onEdit} = this.props;
 
     if (e.keyCode === 13) {
+      if (!e.target.value)
+        return;
+
       edit(id, e.target.value)
       onEdit(null)
     } else if (e.keyCode === 27) {
@@ -39,7 +42,7 @@ export default class ListItem extends React.Component {
     const {todo, nowEditing} = this.props;
 
     // Auto-link title + wrap any code in <code/> blocks
-    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'');
+    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'').replace('<->','&#8596;').replace('->', '&#8594;').replace('<-', '&#8592;');
 
     if (todo.id === nowEditing) {
       return (

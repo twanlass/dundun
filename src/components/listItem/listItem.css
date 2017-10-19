@@ -8,6 +8,10 @@
   position: relative;
 }
 
+.todo--form {
+  margin-bottom: 20px;
+}
+
 .todo--placeholder {
   background-color: #f2f2f2;
   height: 38px;

@@ -20,6 +20,10 @@ export default class listItemForm extends React.Component {
   onAdd(e) {
     const {add} = this.props;
     e.preventDefault();
+
+    if (!this.input.value)
+      return;
+      
     add(this.input.value);
     this.input.value = '';
   }
@@ -29,7 +33,7 @@ export default class listItemForm extends React.Component {
     let input;
 
     return (
-      <div className="todo">
+      <div className="todo todo--form">
         <form onSubmit={(e) => { this.onAdd(e) }}>
           <i className="ico-return"></i>
           <input
