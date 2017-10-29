@@ -7,16 +7,16 @@ import './listItem.css';
 export default class ListItem extends React.Component {
 
   onEnter(id, e) {
-    const {edit, onEdit} = this.props;
+    const {edit} = this.props;
 
     if (e.keyCode === 13) {
       if (!e.target.value)
         return;
 
       edit(id, e.target.value)
-      onEdit(null)
+      this.resetNowEditing()
     } else if (e.keyCode === 27) {
-      onEdit(null)
+      this.resetNowEditing()
     }
   }
 
@@ -38,11 +38,28 @@ export default class ListItem extends React.Component {
     onEdit(todo.id)
   }
 
+  onRemove(id) {
+    const {remove} = this.props;
+    remove(id)
+    this.resetNowEditing()
+  }
+
+  onDone(id) {
+    const {done} = this.props;
+    done(id)
+    this.resetNowEditing()
+  }
+
+  resetNowEditing() {
+    const {onEdit} = this.props;
+    onEdit(null)
+  }
+
   renderTitle() {
     const {todo, nowEditing} = this.props;
 
     // Auto-link title + wrap any code in <code/> blocks
-    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'').replace('<->','&#8596;').replace('->', '&#8594;').replace('<-', '&#8592;');
+    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'').replace(/<->/g,'&#8596;').replace(/->/g, '&#8594;').replace(/<-/g, '&#8592;');
 
     if (todo.id === nowEditing) {
       return (
@@ -56,7 +73,7 @@ export default class ListItem extends React.Component {
   }
 
   render() {
-    const {todo, nowEditing, remove, done, dragStart, dragEnd} = this.props;
+    const {todo, nowEditing, dragStart, dragEnd} = this.props;
 
     let todoClasses = classNames(
       'todo',
@@ -76,12 +93,12 @@ export default class ListItem extends React.Component {
     return (
       <div className={todoClasses} draggable={draggable} onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
         <label id={todo.id}>
-          <input type="checkbox" id={todo.id} onClick={() => { done(todo.id); }} defaultChecked={todo.completed} />
+          <input type="checkbox" id={todo.id} onClick={() => { this.onDone(todo.id); }} defaultChecked={todo.completed} />
         </label>
         {this.renderTitle()}
         <ListItemDate todo={todo} />
         <div className={todoActionClasses}>
-          <i className="ico-trash" onClick={() => { remove(todo.id); }}></i>
+          <i className="ico-trash" onClick={() => { this.onRemove(todo.id); }}></i>
         </div>
       </div>
     );

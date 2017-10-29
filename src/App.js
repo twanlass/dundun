@@ -1,16 +1,16 @@
+// Todo
+// - Read only - fetch list + items from API
+// - Spike redux
+
 import React from 'react';
 import Moment from 'moment';
-import _ from 'lodash';
 import chrono from 'chrono-node';
-import { CSSTransitionGroup } from 'react-transition-group';
-import classNames from 'classnames';
+import $ from 'jquery';
 import './css/app.css';
 import './css/todo-icon-font.css';
 import Nav from './components/nav/nav.js';
-import ListItem from './components/listItem/listItem.js';
-import ListItemForm from './components/listItemForm/listItemForm.js';
-import ListHeader from './components/listHeader/listHeader.js'
-import {isFuture, isToday, isPast, isCompletedYesterday, isComplete, isNotComplete, sortDesc} from './helpers.js';
+import ListSection from './components/listSection/listSection.js';
+import {isFuture, isToday, isPast, isComplete, isNotComplete} from './helpers.js';
 
 const TodoListDebugOptions = ({showDebug, updateDataStruct, resetData}) => {
   if (showDebug) {
@@ -25,163 +25,6 @@ const TodoListDebugOptions = ({showDebug, updateDataStruct, resetData}) => {
   }
 }
 
-const TodoListFuture = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, toggleShowDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
-  let futureDone = todos.filter(isFuture).filter(isComplete);
-  let futureNotDone = todos.filter(isFuture).filter(isNotComplete);
-  let lastTodoId = futureNotDone.length ? futureNotDone[futureNotDone.length - 1].id : null;
-  let futureAllTodos = [];
-
-  if(showDone) {
-    futureAllTodos = _.union(futureNotDone, futureDone);
-  } else {
-    futureAllTodos = futureNotDone;
-  }
-
-  let futureTitle = 'Upcoming'
-  let futureBadgeCount = futureNotDone.length
-
-  let todosClasses = classNames(
-    'todos',
-    {'todos--drag-active': nowDragging}
-  );
-
-  let todoListClasses = classNames(
-    'todo-list',
-    {'todo-list--active': visible}
-  )
-
-  if (visible) {
-    return (
-      <div className={todoListClasses}>
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} badgeCount={futureBadgeCount} viewId={'future'} />
-        <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="future" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
-          {futureAllTodos.map(todo => (
-            <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
-          ))}
-        </CSSTransitionGroup>
-        <ListItemForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={lastTodoId} />
-      </div>
-    )
-  } else {
-    return (
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={futureTitle} badgeCount={futureBadgeCount} viewId={'future'} />
-    )
-  }
-}
-
-const TodoListToday = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, toggleShowDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
-  let todayDone = todos.filter(isToday).filter(isComplete);
-  let todayNotDone = todos.filter(isToday).filter(isNotComplete);
-  let lastTodoId = todayNotDone.length ? todayNotDone[todayNotDone.length - 1].id : null;
-  let todayAllTodos = [];
-
-  if(showDone) {
-    todayAllTodos = _.union(todayNotDone, todayDone);
-  } else {
-    todayAllTodos = todayNotDone;
-  }
-
-  let todayTitle = 'today'
-  let todayBadgeCount = todayNotDone.length;
-
-  let todosClasses = classNames(
-    'todos',
-    {'todos--drag-active': nowDragging}
-  );
-
-  let todoListClasses = classNames(
-    'todo-list',
-    {'todo-list--active': visible}
-  )
-
-  if (visible) {
-    return (
-      <div className={todoListClasses}>
-        <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} badgeCount={todayBadgeCount} viewId={'today'} />
-        <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="today" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
-          {todayAllTodos.map(todo => (
-            <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
-          ))}
-        </CSSTransitionGroup>
-        <ListItemForm add={add} onEdit={onEdit} nowEditing={nowEditing} lastTodoId={lastTodoId} />
-      </div>
-    )
-  } else {
-    return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={todayTitle} badgeCount={todayBadgeCount} viewId={'today'} />
-    )
-  }
-}
-
-const TodoListPast = ({ visible, toggleVisible, todos, nowEditing, nowDragging, add, remove, done, showDone, toggleShowDone, move, edit, onEdit, dragStart, dragEnd, dragOver }) => {
-  let otherNotDone = todos.filter(isPast).filter(isNotComplete).sort(sortDesc);
-
-  let pastTitle = 'later';
-  let pastBadgeCount = otherNotDone.length;
-
-  let todosClasses = classNames(
-    'todos',
-    {'todos--drag-active': nowDragging}
-  );
-
-  let todoListClasses = classNames(
-    'todo-list',
-    {'todo-list--active': visible}
-  )
-
-  if (visible) {
-    if (otherNotDone.length) {
-      return (
-        <div className={todoListClasses}>
-          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} badgeCount={pastBadgeCount} viewId={'someday'} />
-          <CSSTransitionGroup transitionName="todo-" component="div" className={todosClasses} data-id="past" onDragOver={dragOver} transitionEnterTimeout={250} transitionLeaveTimeout={150}>
-            {otherNotDone.map(todo => (
-              <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} onEdit={onEdit} dragStart={dragStart} dragEnd={dragEnd} />
-            ))}
-          </CSSTransitionGroup>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  } else {
-    return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title={pastTitle} badgeCount={pastBadgeCount} viewId={'someday'} />
-    )
-  }
-}
-
-const TodoListDones = ({ visible, toggleVisible, todos, nowEditing, remove, done, showDone, toggleShowDone, move, edit }) => {
-  let dones = todos.filter(isComplete);
-  let donesYesterday = todos.filter(isComplete).filter(isCompletedYesterday);
-
-  // @todo - bucket dones by:
-  // Yesterday
-  // This week
-  // Last week
-  // All time?
-
-  if (visible) {
-    if (dones.length) {
-      return (
-        <div className="todo-list">
-          <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" badgeCount={false} viewId={'dones'} />
-          Yesterday
-          {donesYesterday.map(todo => (
-            <ListItem todo={todo} key={todo.id} nowEditing={nowEditing} remove={remove} done={done} move={move} edit={edit} />
-          ))}
-        </div>
-      );
-    } else {
-      return null;
-    }
-  } else {
-    return (
-      <ListHeader visible={visible} toggleVisible={toggleVisible} showDone={showDone} toggleShowDone={toggleShowDone} title="Done" badgeCount={false} viewId={'dones'} />
-    )
-  }
-}
-
 // @todo - find a better place for this
 let placeholder = document.createElement('div');
 placeholder.className = 'todo--placeholder';
@@ -193,12 +36,7 @@ class TodoApp extends React.Component {
 
     this.state = {
       data: [],
-      showDone: true,
       showDebug: false,
-      futureVisible: false,
-      todayVisible: true,
-      somedayVisible: false,
-      donesVisible: false,
       nowEditing: null,
       nowDragging: false,
       nowDraggingFrom: null,
@@ -207,6 +45,7 @@ class TodoApp extends React.Component {
   }
 
   componentDidMount() {
+    this.setHeaders()
     let data = this.loadState();
 
     if (data.length) {
@@ -216,6 +55,24 @@ class TodoApp extends React.Component {
     }
 
     document.addEventListener("visibilitychange", this.handleTabFocus.bind(this), false);
+  }
+
+  setHeaders() {
+    let userToken = JSON.parse(localStorage.getItem('todo-user')).token
+
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        let url = settings.url;
+        let external_request = url.indexOf('localhost:3001/v1');
+
+        // If we're making a call to the API
+        if (external_request > 1) {
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.setRequestHeader('Data-Type', 'application/json');
+          xhr.setRequestHeader('Authorization', userToken);
+        }
+      }
+    });
   }
 
   handleTabFocus() {
@@ -405,26 +262,23 @@ class TodoApp extends React.Component {
     }
   }
 
-  toggleShowDone(){
-    let showDone = !this.state.showDone;
-    this.setState({ showDone: showDone });
-  }
-
-  toggleVisible(view) {
-    // futureVisible
-    // todayVisible
-    // somedayVisible
-    // donesVisible
-
-    let visibility = !this.state[view.viewId + 'Visible'];
-    this.setState({ [view.viewId + 'Visible']: visibility});
-  }
-
   saveState(todos) {
     localStorage.setItem('todos', JSON.stringify(todos));
   }
 
   loadState() {
+    // $.ajax({
+    //   url: 'http://localhost:3001/v1/lists',
+    //   type: 'GET',
+    //   success: function(data) {
+    //     console.log(data)
+    //   },
+    //   error: function(xhr, ajaxOptions, thrownError) {
+    //     console.log(xhr)
+    //   }
+    // });
+
+
     if (localStorage.getItem('todos')){
       return JSON.parse(localStorage.getItem('todos'));
     } else {
@@ -435,29 +289,6 @@ class TodoApp extends React.Component {
   setWindowTitle() {
     let todos = this.state.data.filter(isToday).filter(isNotComplete).length;
     document.title = `Todos (${todos})`;
-  }
-
-  updateDataStruct() {
-    // let that = this;
-    // let updatedTodos = _.each(this.state.data, function(todo){
-    //
-    //   // Check if prop todo.complete exists, if so remove
-    //   todo.completed = todo.complete;
-    //   delete todo.complete;
-    //
-    //   that.sleep(10);
-    // });
-    // this.setState({data: updatedTodos});
-    // this.saveState(updatedTodos)
-  }
-
-  sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-      if ((new Date().getTime() - start) > milliseconds){
-        break;
-      }
-    }
   }
 
   resetData(){
@@ -471,15 +302,15 @@ class TodoApp extends React.Component {
     return (
       <div className="todos-app">
         <Nav />
-        <TodoListDebugOptions showDebug={this.state.showDebug}
-                              resetData={this.resetData.bind(this)}
-                              updateDataStruct={this.updateDataStruct.bind(this)} />
-        <TodoListToday
-          visible={this.state.todayVisible}
-          toggleVisible={this.toggleVisible.bind(this)}
-          showDone={this.state.showDone}
-          toggleShowDone={this.toggleShowDone.bind(this)}
-          todos={this.state.data}
+        <TodoListDebugOptions
+          showDebug={this.state.showDebug}
+          resetData={this.resetData.bind(this)}
+         />
+
+        <ListSection
+          title="today"
+          collapsed={false}
+          items={this.state.data.filter(isToday)}
           nowEditing={this.state.nowEditing}
           nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
@@ -492,12 +323,10 @@ class TodoApp extends React.Component {
           dragEnd={this.handleDragEnd.bind(this)}
           dragOver={this.handleDragOver.bind(this)}
         />
-        <TodoListFuture
-          visible={this.state.futureVisible}
-          toggleVisible={this.toggleVisible.bind(this)}
-          showDone={this.state.showDone}
-          toggleShowDone={this.toggleShowDone.bind(this)}
-          todos={this.state.data}
+
+        <ListSection
+          title="Upcoming"
+          items={this.state.data.filter(isFuture)}
           nowEditing={this.state.nowEditing}
           nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
@@ -510,12 +339,10 @@ class TodoApp extends React.Component {
           dragEnd={this.handleDragEnd.bind(this)}
           dragOver={this.handleDragOver.bind(this)}
         />
-        <TodoListPast
-          visible={this.state.somedayVisible}
-          toggleVisible={this.toggleVisible.bind(this)}
-          showDone={this.state.showDone}
-          toggleShowDone={this.toggleShowDone.bind(this)}
-          todos={this.state.data}
+
+        <ListSection
+          title="Anytime"
+          items={this.state.data.filter(isPast)}
           nowEditing={this.state.nowEditing}
           nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
@@ -528,17 +355,21 @@ class TodoApp extends React.Component {
           dragEnd={this.handleDragEnd.bind(this)}
           dragOver={this.handleDragOver.bind(this)}
         />
-        <TodoListDones
-          visible={this.state.donesVisible}
-          toggleVisible={this.toggleVisible.bind(this)}
-          showDone={this.state.showDone}
-          toggleShowDone={this.toggleShowDone.bind(this)}
-          todos={this.state.data}
+
+        <ListSection
+          title="Done"
+          items={this.state.data.filter(isComplete)}
           nowEditing={this.state.nowEditing}
+          nowDragging={this.state.nowDragging}
           remove={this.handleRemove.bind(this)}
           done={this.handleDone.bind(this)}
           move={this.handleMove.bind(this)}
           edit={this.handleEdit.bind(this)}
+          onEdit={this.onEdit.bind(this)}
+          add={this.handleAdd.bind(this)}
+          dragStart={this.handleDragStart.bind(this)}
+          dragEnd={this.handleDragEnd.bind(this)}
+          dragOver={this.handleDragOver.bind(this)}
         />
       </div>
     );
