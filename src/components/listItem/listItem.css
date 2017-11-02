@@ -147,18 +147,6 @@
   text-decoration: line-through;
 }
 
-.todo-list-options {
-    margin-left: auto;
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: #888;
-}
-
-.todo-list--active {
-  margin-bottom: auto;
-}
-
 /*Ensure todo child elements are not drop targets for drag / drop sorting*/
 .todos--drag-active .todo * {
   pointer-events: none;

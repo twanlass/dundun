@@ -1,3 +1,7 @@
+// @todo
+// - Support for types of sections – today, done, etc
+// - Allow a form to be optionally included
+
 import React from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -6,7 +10,7 @@ import './listSection.css';
 import ListSectionHeader from '../listSectionHeader/listSectionHeader.js'
 import ListItem from '../listItem/listItem.js';
 import ListItemForm from '../listItemForm/listItemForm.js';
-import {isComplete, isNotComplete} from '../../helpers.js';
+import {isComplete, isNotComplete} from '../../helpers/helpers.js';
 
 export default class listSection extends React.Component {
   constructor(props) {
@@ -75,7 +79,7 @@ export default class listSection extends React.Component {
             transitionName="todo-"
             component="div"
             className={itemsClasses}
-            data-id="today"
+            data-id={this.props.title}
             onDragOver={dragOver}
             transitionEnterTimeout={250}
             transitionLeaveTimeout={150}>

@@ -7,15 +7,22 @@ import './listItem.css';
 export default class ListItem extends React.Component {
 
   onEnter(id, e) {
-    const {edit} = this.props;
-
     if (e.keyCode === 13) {
       if (!e.target.value)
         return;
 
-      edit(id, e.target.value)
-      this.resetNowEditing()
+      this.handleEdit(e.target.value)
+
     } else if (e.keyCode === 27) {
+      this.resetNowEditing()
+    }
+  }
+
+  handleEdit(title) {
+    const {todo, edit} = this.props;
+
+    if (todo.title !== title) {
+      edit(title, todo.id)
       this.resetNowEditing()
     }
   }
@@ -59,15 +66,15 @@ export default class ListItem extends React.Component {
     const {todo, nowEditing} = this.props;
 
     // Auto-link title + wrap any code in <code/> blocks
-    let linkedTitle = Autolinker.link( todo.text, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'').replace(/<->/g,'&#8596;').replace(/->/g, '&#8594;').replace(/<-/g, '&#8592;');
+    let linkedTitle = Autolinker.link( todo.title, {truncate: { length: 15, location: 'start' }} ).replace(/(`.*?`)/gi, '<code>$&</code>').replace(/`/g,'').replace(/<->/g,'&#8596;').replace(/->/g, '&#8594;').replace(/<-/g, '&#8592;');
 
     if (todo.id === nowEditing) {
       return (
-        <input className="todo__title" type="text" title={todo.id + ' – ' + todo.text} defaultValue={todo.text} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }} />
+        <input className="todo__title" type="text" title={todo.id + ' – ' + todo.title} defaultValue={todo.title} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }} />
       )
     } else {
       return (
-        <div className="todo__title" title={todo.text} dangerouslySetInnerHTML={{ __html: linkedTitle }} onClick={(e) => {this.onEdit(e)}}></div>
+        <div className="todo__title" title={todo.title} dangerouslySetInnerHTML={{ __html: linkedTitle }} onClick={(e) => {this.onEdit(e)}}></div>
       )
     }
   }

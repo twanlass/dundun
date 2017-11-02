@@ -1,4 +1,6 @@
 import React from 'react';
+import Moment from 'moment';
+import chrono from 'chrono-node';
 import './listItemForm.css';
 import '../../css/todo-icon-font.css';
 
@@ -18,15 +20,45 @@ export default class listItemForm extends React.Component {
   }
 
   onAdd(e) {
-    const {add} = this.props;
     e.preventDefault();
 
     if (!this.input.value)
       return;
-      
-    add(this.input.value);
+
+    this.handleAdd(this.input.value);
     this.input.value = '';
   }
+
+  handleAdd(val) {
+    const {add} = this.props;
+
+    let title = val;
+    // @ todo - need to work out client / server item id creation
+    // let id = (new Date()).getTime();
+    let NLDate = chrono.parse(val);
+    let dueAt = null;
+    let isEvent = null;
+
+    // If a date string was passed and parsed...
+    if (NLDate.length) {
+      // Set due date to date passed
+      dueAt = Moment(NLDate[0].start.date()).valueOf();
+
+      // Remove any date lanuage from todo title, like tomorrow, Friday, etc
+      title = title.replace(NLDate[0].text, '').trim();
+
+      // If an exact hour / minute was passed, this todo is an event (meeting, call, dinner, etc)...
+      if (NLDate[0].start.knownValues.hour || NLDate[0].start.knownValues.minute) {
+        isEvent = true;
+      }
+    } else {
+      // No due date passed – use creation time as default due date
+      dueAt = Moment().valueOf();
+    }
+
+    add(title, dueAt, isEvent)
+  }
+
 
   render() {
     const {nowEditing} = this.props;

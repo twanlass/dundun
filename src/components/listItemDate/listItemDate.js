@@ -1,20 +1,20 @@
 import React from 'react';
 import Moment from 'moment';
 import classNames from 'classnames';
-import {isFuture, isToday, isPast} from '../../helpers.js';
+import {isFuture, isToday, isPast} from '../../helpers/helpers.js';
 import './listItemDate.css';
 
 export default class ListItemDate extends React.Component {
   renderTime(todo) {
-    return Moment(todo.dueAt).format('h:mm A')
+    return Moment(todo.due_at).format('h:mm A')
   }
 
   renderDay(todo) {
-    return Moment(todo.dueAt).format('ddd MMM DD')
+    return Moment(todo.due_at).format('ddd MMM DD')
   }
 
   renderDayAndTime(todo) {
-    return Moment(todo.dueAt).format('ddd MMM DD – h:mm A')
+    return Moment(todo.due_at).format('ddd MMM DD – h:mm A')
   }
 
   render() {
@@ -27,13 +27,13 @@ export default class ListItemDate extends React.Component {
     );
 
     // An event item today
-    if (todo.isEvent && isToday(todo)) {
+    if (todo.is_event && isToday(todo)) {
       dateString = this.renderTime(todo)
     // An event item in the past
-    } else if (todo.isEvent && isPast(todo)) {
+    } else if (todo.is_event && isPast(todo)) {
       dateString = this.renderTime(todo)
     // A future event item
-    } else if (todo.isEvent && isFuture(todo)) {
+    } else if (todo.is_event && isFuture(todo)) {
       dateString = this.renderDayAndTime(todo)
     // A future non-event item
     } else if (isFuture(todo)) {
