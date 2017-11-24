@@ -1,82 +1,56 @@
-import { ADD_TODO, EDIT_TODO, MOVE_TODO, REMOVE_TODO, TOGGLE_TODO } from '../actionTypes/actionTypes.js';
+import {
+  ADD_ITEM,
+  EDIT_ITEM,
+  REORDER_ITEM,
+  TOGGLE_ITEM,
+  REMOVE_ITEM,
+  RECEIVE_LIST_ITEMS
+} from '../actionTypes/actionTypes.js';
 
 export const items = (state = initialItems, action) => {
   console.log(action)
+  let newState;
+
   switch (action.type) {
-    case ADD_TODO:
-      return [
-              ...state,
-              {
-                id: action.id,
-                title: action.title,
-                completed: false,
-                completed_at: null,
-                due_at: action.due_at,
-                is_event: action.is_event
-              }
-            ]
+    case ADD_ITEM:
+      newState = Object.assign({}, state);
+      newState[action.id] = {
+        id: action.id,
+        title: action.title,
+        created_at: action.createdAt,
+        completed: false,
+        completed_at: null,
+        due_at: action.dueAt,
+        is_event: action.isEvent,
+        list_id: action.listId
+      }
+      return newState
 
-    case EDIT_TODO:
-      return state.map(item => {
-        if (item.id !== action.id) {
-          return item;
-        }
+    case EDIT_ITEM:
+      newState = Object.assign({}, state);
+      newState[action.id] = Object.assign(newState[action.id], {...action.item})
+      return newState
 
-        return {
-          ...item,
-          title: action.title
-        };
+    case REMOVE_ITEM:
+      newState = Object.assign({}, state);
+      delete newState[action.id]
+      return newState
+
+    case TOGGLE_ITEM:
+      newState = Object.assign({}, state);
+      let completed = newState[action.id].completed
+      newState[action.id].completed = !completed
+      newState[action.id].completed_at = completed ? action.completed_at : newState[action.id].completed_at
+      return newState
+
+    case RECEIVE_LIST_ITEMS:
+      return Object.assign({}, state, {
+        ...action.items
       })
 
-    case MOVE_TODO:
-      let newState = state.slice(0);
-      return move(newState, action.from, action.to);
-
-    case REMOVE_TODO:
-      let index = state.findIndex(item => item.id === action.id);
-      return state
-        .slice(0, index)
-        .concat(state.slice(index + 1))
-
-    case TOGGLE_TODO:
-      return state.map(item => {
-        if (item.id !== action.id) {
-          return item;
-        }
-
-        return {
-          ...item,
-          completed: !item.completed,
-          completed_at: (item.completed) ? item.completed_at : action.completed_at
-        };
-      })
     default:
       return state
   }
 }
 
-const initialItems = [
-  {
-    title: 'first todo',
-    completed: false,
-    id: 1
-  }
-]
-
-
-function move(arr, old_index, new_index) {
-    while (old_index < 0) {
-        old_index += arr.length;
-    }
-    while (new_index < 0) {
-        new_index += arr.length;
-    }
-    if (new_index >= arr.length) {
-        var k = new_index - arr.length;
-        while ((k--) + 1) {
-            arr.push(undefined);
-        }
-    }
-     arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
-   return arr;
-}
+const initialItems = []

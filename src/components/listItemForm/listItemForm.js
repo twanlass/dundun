@@ -6,11 +6,11 @@ import '../../css/todo-icon-font.css';
 
 export default class listItemForm extends React.Component {
   onEditPrevious(e) {
-    const {onEdit, lastTodoId} = this.props;
+    const {onEdit, lastItemId} = this.props;
 
     // On up-arrow key, edit previous todo item
     if (e.keyCode === 38) {
-      onEdit(lastTodoId)
+      onEdit(lastItemId)
     }
   }
 
@@ -30,12 +30,13 @@ export default class listItemForm extends React.Component {
   }
 
   handleAdd(val) {
-    const {add} = this.props;
+    const {add, activeList} = this.props;
 
     let title = val;
     // @ todo - need to work out client / server item id creation
     // let id = (new Date()).getTime();
     let NLDate = chrono.parse(val);
+    let createdAt = Moment.utc().format();
     let dueAt = null;
     let isEvent = null;
 
@@ -53,10 +54,10 @@ export default class listItemForm extends React.Component {
       }
     } else {
       // No due date passed – use creation time as default due date
-      dueAt = Moment().valueOf();
+      dueAt = Moment.utc().format();
     }
 
-    add(title, dueAt, isEvent)
+    add(title, createdAt, dueAt, isEvent, activeList)
   }
 
 
@@ -70,7 +71,7 @@ export default class listItemForm extends React.Component {
           <i className="ico-return"></i>
           <input
             className="list-item-form"
-            placeholder="Add a new todo..."
+            placeholder="What's next?"
             onClick={(e) => {this.onClick()}}
             onKeyUp={(e) => { this.onEditPrevious(e) }}
             ref={(input) => {

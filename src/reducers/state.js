@@ -1,4 +1,4 @@
-import { SET_NOW_EDITING, SET_NOW_DRAGGING, SET_NOW_DRAGGING_FROM, SET_NOW_DRAGGING_TO } from '../actionTypes/actionTypes.js';
+import { SET_NOW_EDITING, SET_NOW_DRAGGING, SET_NOW_DRAGGING_FROM, SET_NOW_DRAGGING_TO, SET_ACITVE_LIST } from '../actionTypes/actionTypes.js';
 
 export const state = (state = initialState, action) => {
   switch (action.type) {
@@ -22,6 +22,11 @@ export const state = (state = initialState, action) => {
         nowDraggingTo: action.sectionId
       })
 
+    case SET_ACITVE_LIST:
+      return Object.assign({}, state, {
+        activeList: action.id
+      })
+
     default:
       return state
   }
@@ -31,5 +36,6 @@ const initialState = {
   nowEditing: null,
   nowDragging: false,
   nowDraggingFrom: null,
-  nowDraggingTo: null
+  nowDraggingTo: null,
+  activeList: null
 }

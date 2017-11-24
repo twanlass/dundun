@@ -1,7 +1,3 @@
-// @todo
-// - Support for types of sections – today, done, etc
-// - Allow a form to be optionally included
-
 import React from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -17,29 +13,21 @@ export default class listSection extends React.Component {
     super(props);
 
     this.state = {
-      collapsed: this.props.collapsed,
       showDone: true
     };
   }
 
-  toggleShowDone(){
+  toggleShowDone() {
     let showDone = !this.state.showDone;
     this.setState({ showDone: showDone });
   }
 
-  toggleCollapsed() {
-    let collapsed = !this.state.collapsed;
-    this.setState({ collapsed: collapsed });
-  }
-
   renderListSectionHeader() {
-    const {items, title}  = this.props;
-    let badgeCount = items.filter(isNotComplete).length;
+    const {items, title, activeList}  = this.props;
+    let badgeCount = _.filter(items, { 'completed': false, 'list_id': activeList}).length;
 
     return (
       <ListSectionHeader
-        collapsed={this.state.collapsed}
-        toggleCollapsed={this.toggleCollapsed.bind(this)}
         showDone={this.state.showDone}
         toggleShowDone={this.toggleShowDone.bind(this)}
         title={title}
@@ -49,16 +37,27 @@ export default class listSection extends React.Component {
   }
 
   render() {
-    const {items, nowEditing, nowDragging, add, remove, done, move, edit, onEdit, dragStart, dragEnd, dragOver}  = this.props;
-    let completedItems = items.filter(isComplete);
-    let notCompletedItems = items.filter(isNotComplete);
-    let lastItemId = notCompletedItems.length ? notCompletedItems[notCompletedItems.length - 1].id : null;
-    let allItems = [];
+    const {items, sorts, nowEditing, nowDragging, add, remove, done, reorder, edit, onEdit, dragStart, dragEnd, dragOver, activeList}  = this.props;
 
-    if(this.state.showDone) {
-      allItems = _.union(notCompletedItems, completedItems);
-    } else {
-      allItems = notCompletedItems;
+    let completedItems = []
+    let notCompletedItems = []
+    let allItems = []
+    let lastItemId = null
+
+    if (sorts) {
+      sorts.forEach(function(item) {
+        if (items[item]) {
+          items[item].completed ? completedItems.push(items[item]) : notCompletedItems.push(items[item]);
+        }
+      })
+
+      lastItemId = notCompletedItems.length ? notCompletedItems[notCompletedItems.length - 1].id : null;
+
+      if(this.state.showDone) {
+        allItems = _.union(notCompletedItems, completedItems);
+      } else {
+        allItems = notCompletedItems;
+      }
     }
 
     let itemsClasses = classNames(
@@ -67,11 +66,10 @@ export default class listSection extends React.Component {
     );
 
     let itemSectionClasses = classNames(
-      'todo-list',
-      {'todo-list--active': !this.state.collapsed}
+      'todo-list'
     )
 
-    if (!this.state.collapsed) {
+    if (allItems.length) {
       return (
         <div className={itemSectionClasses}>
           {this.renderListSectionHeader()}
@@ -83,18 +81,19 @@ export default class listSection extends React.Component {
             onDragOver={dragOver}
             transitionEnterTimeout={250}
             transitionLeaveTimeout={150}>
-              {allItems.map(todo => (
+              {allItems.map(item => (
                 <ListItem
-                  todo={todo}
-                  key={todo.id}
+                  todo={item}
+                  key={item.created_at}
                   nowEditing={nowEditing}
                   remove={remove}
                   done={done}
-                  move={move}
+                  reorder={reorder}
                   edit={edit}
                   onEdit={onEdit}
                   dragStart={dragStart}
                   dragEnd={dragEnd}
+                  activeList={activeList}
                 />
               ))}
           </CSSTransitionGroup>
@@ -102,13 +101,20 @@ export default class listSection extends React.Component {
             add={add}
             onEdit={onEdit}
             nowEditing={nowEditing}
-            lastTodoId={lastItemId}
+            lastItemId={lastItemId}
+            activeList={activeList}
           />
         </div>
       )
     } else {
       return (
-        this.renderListSectionHeader()
+        <ListItemForm
+          add={add}
+          onEdit={onEdit}
+          nowEditing={nowEditing}
+          lastItemId={lastItemId}
+          activeList={activeList}
+        />
       )
     }
   }

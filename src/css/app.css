@@ -41,8 +41,8 @@ form {
 }
 
 .todo--enter {
-  opacity: 0.01;
-  height: 20px;
+  opacity: 1;
+  height: 28px;
 }
 
 .todo--enter.todo--enter-active {

@@ -44,7 +44,7 @@ export default class ListSectionHeader extends React.Component {
 
     return (
       <div className={todoListHeaderClasses}>
-        <div className="list-header__title" onClick={() => { toggleCollapsed({viewId}); }}>
+        <div className="list-header__title">
           {title}{this.renderBadgeCount()}
         </div>
         {this.renderToggle()}

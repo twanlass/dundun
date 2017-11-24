@@ -1,13 +1,11 @@
 // Todo
 // – drag / drop between sections + date issues
-// - Read only - fetch list + items from API
-// - Spike redux
 
 import React from 'react';
 import './css/app.css';
 import './css/todo-icon-font.css';
-import List from './containers/list/list.js';
-import Nav from './components/nav/nav.js';
+import List from './containers/listContainer/listContainer.js';
+import Nav from './containers/navContainer/navContainer.js';
 
 // const TodoListDebugOptions = ({showDebug, updateDataStruct, resetData}) => {
 //   if (showDebug) {

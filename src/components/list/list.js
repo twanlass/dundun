@@ -3,13 +3,11 @@ import { isToday, isFuture, isPast, isComplete } from '../../helpers/helpers.js'
 import ListSection from '../../components/listSection/listSection.js';
 
 export default class List extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  // componentWillReceiveProps(nextProps) {
-  //   this.state = {items: nextProps.items};
-  // }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.activeList !== this.props.activeList) {
+      this.props.getListItems(nextProps.activeList)
+    }
+  }
 
   // handleMove(id, list) {
   //   // list: future, today, past
@@ -30,13 +28,13 @@ export default class List extends React.Component {
   // }
 
   handleDragStart(e) {
-    const { onDrag, onDragFrom } = this.props;
+    const { sorts, onDrag, onDragFrom, reorder, activeList } = this.props;
     onDrag(true)
 
     this.dragged = e.currentTarget;
 
     // Get the list we're dragging from based on the currently draged todo
-    let data = this.props.items;
+    let data = sorts[activeList];
     let draggedTodo = data.filter(todo => todo.id === Number(e.currentTarget.dataset.id));
     let nowDraggingFrom = draggedTodo.some(isToday) ? 'today' : 'future';
     onDragFrom(nowDraggingFrom)
@@ -87,7 +85,7 @@ export default class List extends React.Component {
   }
 
   handleDragEnd(e) {
-    const { onDrag, move } = this.props;
+    const { sorts, onDrag, reorder, activeList } = this.props;
     onDrag(false)
 
     this.dragged.style.display = "flex";
@@ -95,80 +93,56 @@ export default class List extends React.Component {
     // Remove temp placeholder element
     document.getElementById('todo--placeholder').outerHTML='';
 
-    let data = this.props.items;
+    let data = sorts[activeList];
     let from = Number(this.dragged.dataset.id);
     let to = Number(this.over.dataset.id);
 
-    let fromIndex = data.findIndex(todo => todo.id === from);
-    let toIndex = data.findIndex(todo => todo.id === to);
+    let fromIndex = data.indexOf(from)
+    let toIndex = data.indexOf(to)
 
     // Return the todo being dragged and the todo it's dropped on
     let origin = this.props.nowDraggingFrom;
     let destination = this.props.nowDraggingTo;
 
-    console.log(origin)
-    console.log(destination)
+    // console.log(origin)
+    // console.log(destination)
 
     // @todo - If we're dragging from the today list to the future list, 'move' the todo as well
     // by calling a separate dispatch after the move event
     // let sectionId = origin == destination ? null : destination;
 
-    move(fromIndex, toIndex)
+    reorder(from, fromIndex, toIndex, activeList)
   }
 
   render() {
-    let itemsToday = this.props.items.filter(isToday)
-    let itemsFuture = this.props.items.filter(isFuture)
-    let itemsPast = this.props.items.filter(isPast)
-    let itemsCompleted = this.props.items.filter(isComplete)
+    const {activeList} = this.props;
 
-    let sections = [
-      {
-        title: "today",
-        collapsed: false,
-        items: itemsToday
-      },
-      {
-        title: "upcoming",
-        items: itemsFuture
-      },
-      {
-        title: "anytime",
-        items: itemsPast
-      },
-      {
-        title: "complete",
-        items: itemsCompleted
-      }
-    ]
-
-    // move={this.handleMove.bind(this)}
-
-
-    return (
-      <div>
-        {sections.map(section => (
-          <ListSection
-            key={section.title}
-            title={section.title}
-            collapsed={section.collapsed}
-            items={section.items}
-            add={this.props.add.bind(this)}
-            remove={this.props.remove.bind(this)}
-            done={this.props.done.bind(this)}
-            edit={this.props.edit.bind(this)}
-            onEdit={this.props.onEdit.bind(this)}
-            dragStart={this.handleDragStart.bind(this)}
-            dragEnd={this.handleDragEnd.bind(this)}
-            dragOver={this.handleDragOver.bind(this)}
-            nowEditing={this.props.nowEditing}
-            nowDragging={this.props.nowDragging}
-            nowDraggingFrom={this.props.nowDragging}
-            nowDraggingTo={this.props.nowDragging}
-          />
-        ))}
-      </div>
-    )
+    if (activeList) {
+      return (
+        <ListSection
+          key='today'
+          title='today'
+          items={this.props.items}
+          sorts={this.props.sorts[activeList]}
+          add={this.props.add.bind(this)}
+          edit={this.props.edit.bind(this)}
+          done={this.props.done.bind(this)}
+          reorder={this.props.reorder.bind(this)}
+          remove={this.props.remove.bind(this)}
+          onEdit={this.props.onEdit.bind(this)}
+          dragStart={this.handleDragStart.bind(this)}
+          dragEnd={this.handleDragEnd.bind(this)}
+          dragOver={this.handleDragOver.bind(this)}
+          nowEditing={this.props.nowEditing}
+          nowDragging={this.props.nowDragging}
+          nowDraggingFrom={this.props.nowDragging}
+          nowDraggingTo={this.props.nowDragging}
+          activeList={this.props.activeList}
+        />
+      )
+    } else {
+      return null;
+    }
   }
 }
 

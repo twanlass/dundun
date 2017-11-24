@@ -1,6 +1,6 @@
 .list-header {
   border-bottom: 1px solid #F2F2F2;
-  color: #ccc;
+  color: #333;
   cursor: pointer;
   font-size: 16px;
   font-weight: 700;
@@ -18,34 +18,19 @@
   flex:none;
 }
 
-.list-header--active {
-  color: #333;
-}
-
-.list-header--active:hover,
-.list-header:hover {
-  transition: color .15s;
-  color: #333;
-}
-
 .list-header__title {
   display: flex;
   flex: 1 0 auto;
 }
 
 .list-header__title-badge {
-  background-color: #CCCCCC;
+  background-color: #9013FE;
   color: #fff;
   padding: 2px 10px;
   border-radius: 100px;
   font-weight: 700;
   font-size: 12px;
   margin-left: 4px;
-}
-
-.list-header--active .list-header__title-badge {
-  background-color: #9013FE;
-  color: #fff;
 }
 
 .list-header .ico-filter {
