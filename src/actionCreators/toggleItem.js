@@ -2,11 +2,12 @@ import * as Api from '../helpers/api.js';
 import { TOGGLE_ITEM } from '../actionTypes/actionTypes.js';
 import Moment from 'moment';
 
-const toggle = id => {
+const toggle = (id, completed) => {
   return {
     type: TOGGLE_ITEM,
     id,
-    completed_at: Moment().valueOf()
+    completed,
+    completed_at: Moment.utc().format()
   }
 }
 

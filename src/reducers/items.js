@@ -14,16 +14,7 @@ export const items = (state = initialItems, action) => {
   switch (action.type) {
     case ADD_ITEM:
       newState = Object.assign({}, state);
-      newState[action.id] = {
-        id: action.id,
-        title: action.title,
-        created_at: action.createdAt,
-        completed: false,
-        completed_at: null,
-        due_at: action.dueAt,
-        is_event: action.isEvent,
-        list_id: action.listId
-      }
+      newState[action.item.id] = {...action.item}
       return newState
 
     case EDIT_ITEM:
@@ -38,9 +29,8 @@ export const items = (state = initialItems, action) => {
 
     case TOGGLE_ITEM:
       newState = Object.assign({}, state);
-      let completed = newState[action.id].completed
-      newState[action.id].completed = !completed
-      newState[action.id].completed_at = completed ? action.completed_at : newState[action.id].completed_at
+      newState[action.id].completed = action.completed
+      newState[action.id].completed_at = action.completed ? action.completed_at : newState[action.id].completed_at
       return newState
 
     case RECEIVE_LIST_ITEMS:

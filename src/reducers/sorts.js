@@ -29,9 +29,7 @@ export const sorts = (state = [], action) => {
 
     case REORDER_ITEM_INDEX:
       newState = Object.assign({}, state);
-      console.log(newState[action.listId])
       let newSortArray = move(newState[action.listId], action.from, action.to)
-      console.log(newSortArray)
       newState[action.listId] = newSortArray
       return newState
 

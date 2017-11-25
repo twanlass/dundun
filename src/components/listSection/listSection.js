@@ -36,6 +36,12 @@ export default class listSection extends React.Component {
     )
   }
 
+  // If a temp client id (cid) exists, use that as the key to
+  // avoid rendering the list item twice (fake item and API returned item)
+  itemKey(item) {
+    return item.cid ? item.cid : item.id;
+  }
+
   render() {
     const {items, sorts, nowEditing, nowDragging, add, remove, done, reorder, edit, onEdit, dragStart, dragEnd, dragOver, activeList}  = this.props;
 
@@ -84,7 +90,7 @@ export default class listSection extends React.Component {
               {allItems.map(item => (
                 <ListItem
                   todo={item}
-                  key={item.created_at}
+                  key={this.itemKey(item)}
                   nowEditing={nowEditing}
                   remove={remove}
                   done={done}

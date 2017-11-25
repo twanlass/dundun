@@ -1,23 +1,17 @@
 import Moment from 'moment';
-import cuid from 'cuid';
 import * as Api from '../helpers/api.js';
 import {
   ADD_ITEM,
   ADD_ITEM_INDEX,
   EDIT_ITEM,
-  REMOVE_TODO
+  EDIT_ITEM_INDEX,
+  REMOVE_ITEM
 } from '../actionTypes/actionTypes.js';
 
-const add = (id, title, createdAt, dueAt, isEvent, listId) => {
+const add = (item) => {
   return {
     type: ADD_ITEM,
-    completed: false,
-    id,
-    title,
-    createdAt,
-    dueAt,
-    isEvent,
-    listId
+    item: {...item}
   }
 }
 
@@ -25,6 +19,15 @@ const addIndex = (id, listId) => {
   return {
     type: ADD_ITEM_INDEX,
     id,
+    listId
+  }
+}
+
+const editIndex = (id, tempId, listId) => {
+  return {
+    type: EDIT_ITEM_INDEX,
+    id,
+    tempId,
     listId
   }
 }
@@ -40,13 +43,19 @@ const edit = (item, id) => {
   }
 }
 
+const remove = (id) => {
+  return {
+    type: REMOVE_ITEM,
+    id
+  }
+}
+
 export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
   // Generate temp id to be used until API returns new item id
-  let tempId = cuid();
+  let tempId = 'cid_' + Math.floor(performance.now())
 
   // Create API fetch / promise
   let item = Api.postListItem({
-    'temp_id': tempId,
     'idx_position': 'last',
     'title': title,
     'due_at': dueAt,
@@ -56,7 +65,7 @@ export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
 
   return (dispatch) => {
     // Immediately add item to client collection and the sort index
-    dispatch(add(tempId, title, createdAt, dueAt, isEvent, listId));
+    dispatch(add({id: tempId, title, createdAt, dueAt, isEvent, listId}));
     dispatch(addIndex(tempId, listId));
 
     // Await API call response
@@ -65,8 +74,11 @@ export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
         let item = response.item
         let meta = response.meta
 
-        // Update client collection with real item data returned from API
-        dispatch(edit(item, meta.temp_id))
+        // Update client collection with real item data returned from API,
+        // remove temp collection item and update sort index to point to real item id
+        dispatch(add(Object.assign({cid: tempId}, {...item})))
+        dispatch(remove(tempId))
+        dispatch(editIndex(item.id, tempId, meta.list_id))
       })
     })
   };

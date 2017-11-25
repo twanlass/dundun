@@ -4,7 +4,8 @@ import './nav.css';
 
 export default class Nav extends React.Component {
   componentDidMount() {
-    this.props.getLists()
+    const {getLists} = this.props;
+    getLists()
   }
 
   componentWillReceiveProps(nextProps) {
@@ -22,11 +23,11 @@ export default class Nav extends React.Component {
 
   render() {
     // new list options = things to do / things to remember
-    const {setActiveList, activeList} = this.props;
+    const {lists, setActiveList, activeList} = this.props;
 
     return (
       <div className="nav">
-        {this.props.lists.map(list => (
+        {lists.map(list => (
           <NavItem key={list.id} list={list} setActiveList={setActiveList} activeList={activeList} />
         ))}
         <div className="nav-item" onClick={() => { this.onNewList(); }}>+ New List</div>

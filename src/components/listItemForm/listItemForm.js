@@ -43,7 +43,7 @@ export default class listItemForm extends React.Component {
     // If a date string was passed and parsed...
     if (NLDate.length) {
       // Set due date to date passed
-      dueAt = Moment(NLDate[0].start.date()).valueOf();
+      dueAt = Moment(NLDate[0].start.date()).utc().format();
 
       // Remove any date lanuage from todo title, like tomorrow, Friday, etc
       title = title.replace(NLDate[0].text, '').trim();
