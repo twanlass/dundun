@@ -3,6 +3,6 @@ export const getUserToken = () => {
   if (user) {
     return JSON.parse(user).token
   } else {
-    throw "User is not signed in";
+    throw new Error("User is not signed in");
   }
 }

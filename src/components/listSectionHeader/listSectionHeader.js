@@ -34,7 +34,7 @@ export default class ListSectionHeader extends React.Component {
   }
 
   render() {
-    let {collapsed, toggleCollapsed, title, viewId} = this.props;
+    let {collapsed, title, viewId} = this.props;
 
     let todoListHeaderClasses = classNames(
       'list-header',

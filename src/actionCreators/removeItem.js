@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-fetch';
 import * as Api from '../helpers/api.js';
 import {
   REMOVE_ITEM,

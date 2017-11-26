@@ -6,7 +6,6 @@ import './listSection.css';
 import ListSectionHeader from '../listSectionHeader/listSectionHeader.js'
 import ListItem from '../listItem/listItem.js';
 import ListItemForm from '../listItemForm/listItemForm.js';
-import {isComplete, isNotComplete} from '../../helpers/helpers.js';
 
 export default class listSection extends React.Component {
   constructor(props) {
@@ -37,7 +36,7 @@ export default class listSection extends React.Component {
   }
 
   // If a temp client id (cid) exists, use that as the key to
-  // avoid rendering the list item twice (fake item and API returned item)
+  // avoid rendering an item twice (temp item, and real API returned item)
   itemKey(item) {
     return item.cid ? item.cid : item.id;
   }

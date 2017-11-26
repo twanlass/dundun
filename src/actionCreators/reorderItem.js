@@ -1,6 +1,5 @@
 import * as Api from '../helpers/api.js';
 import {
-  REORDER_ITEM,
   REORDER_ITEM_INDEX
  } from '../actionTypes/actionTypes.js';
 

@@ -1,9 +1,7 @@
-import Moment from 'moment';
 import * as Api from '../helpers/api.js';
 import {
   ADD_ITEM,
   ADD_ITEM_INDEX,
-  EDIT_ITEM,
   EDIT_ITEM_INDEX,
   REMOVE_ITEM
 } from '../actionTypes/actionTypes.js';
@@ -29,17 +27,6 @@ const editIndex = (id, tempId, listId) => {
     id,
     tempId,
     listId
-  }
-}
-
-const edit = (item, id) => {
-  return {
-    type: EDIT_ITEM,
-    id,
-    item: {
-      id: item.id,
-      idx: item.idx
-    }
   }
 }
 
