@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
-import Nav from '../../components/nav/nav.js'
-
+import Sidebar from '../../components/sidebar/sidebar.js'
 import {getLists} from '../../actionCreators/getLists.js';
 import {setActiveList} from '../../actionCreators/setActiveList.js';
 
 const mapStateToProps = state => {
   return {
     lists: state.lists,
+    todayBadgeCount: state.state.todayBadgeCount,
     activeList: state.state.activeList
   }
 }
@@ -18,9 +18,9 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-const NavContainer = connect(
+const SidebarContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Nav)
+)(Sidebar)
 
-export default NavContainer
+export default SidebarContainer

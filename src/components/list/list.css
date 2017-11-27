@@ -1,3 +1,7 @@
+.todo-list {
+  flex: 1 1 auto;
+}
+
 .todo-list-options {
     margin-left: auto;
     font-size: 14px;

@@ -1,4 +1,5 @@
 import * as Api from '../helpers/api.js';
+import {setTodayBadgeCount} from './setTodayBadgeCount.js';
 import { TOGGLE_ITEM } from '../actionTypes/actionTypes.js';
 import Moment from 'moment';
 
@@ -18,6 +19,7 @@ export const toggleItem = (id, completed) => {
   return (dispatch) => {
     // Immediately toggle item in client collection
     dispatch(toggle(id, completed));
+    dispatch(setTodayBadgeCount());
 
     // Await API call response
     item.then(response => {

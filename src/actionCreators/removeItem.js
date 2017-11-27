@@ -1,4 +1,5 @@
 import * as Api from '../helpers/api.js';
+import {setTodayBadgeCount} from './setTodayBadgeCount.js';
 import {
   REMOVE_ITEM,
   REMOVE_ITEM_INDEX
@@ -26,6 +27,7 @@ export const removeItem = (id, listId) => {
     // Immediately remove item from client collection and sort index
     dispatch(remove(id))
     dispatch(removeIndex(id, listId))
+    dispatch(setTodayBadgeCount());
 
     // Dispatch API call to delete item and await response
     item.then(response => {

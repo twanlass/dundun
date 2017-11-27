@@ -23,8 +23,9 @@ export default class ListItem extends React.Component {
 
     if (todo.title !== title) {
       edit(title, todo.id)
-      this.resetNowEditing()
     }
+
+    this.resetNowEditing()
   }
 
   onFocus(e) {

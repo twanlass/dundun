@@ -1,4 +1,10 @@
-import { SET_NOW_EDITING, SET_NOW_DRAGGING, SET_NOW_DRAGGING_TO, SET_ACITVE_LIST } from '../actionTypes/actionTypes.js';
+import {
+  SET_NOW_EDITING,
+  SET_NOW_DRAGGING,
+  SET_NOW_DRAGGING_TO,
+  SET_ACITVE_LIST,
+  SET_TODAY_BADGE_COUNT
+} from '../actionTypes/actionTypes.js';
 
 export const state = (state = initialState, action) => {
   switch (action.type) {
@@ -20,6 +26,11 @@ export const state = (state = initialState, action) => {
     case SET_ACITVE_LIST:
       return Object.assign({}, state, {
         activeList: action.id
+      })
+
+    case SET_TODAY_BADGE_COUNT:
+      return Object.assign({}, state, {
+        todayBadgeCount: action.count
       })
 
     default:

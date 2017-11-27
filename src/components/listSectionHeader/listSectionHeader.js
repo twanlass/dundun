@@ -21,18 +21,6 @@ export default class ListSectionHeader extends React.Component {
     }
   }
 
-  renderBadgeCount() {
-    let {badgeCount} = this.props;
-
-    if (badgeCount) {
-      return(
-        <div className="list-header__title-badge">{badgeCount}</div>
-      )
-    } else {
-      return null;
-    }
-  }
-
   render() {
     let {collapsed, title, viewId} = this.props;
 
@@ -45,7 +33,7 @@ export default class ListSectionHeader extends React.Component {
     return (
       <div className={todoListHeaderClasses}>
         <div className="list-header__title">
-          {title}{this.renderBadgeCount()}
+          {title}
         </div>
         {this.renderToggle()}
       </div>

@@ -1,0 +1,59 @@
+.sidebar-item {
+  font-weight: 500;
+  font-size: 16px;
+  color: #8B97A2;
+  letter-spacing: -0.29px;
+  text-transform: capitalize;
+  padding: 6px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-item:hover {
+  transition: color .15s;
+  color: #333;
+}
+
+.sidebar-item--active,
+.sidebar-item--active:hover {
+  color: #0052FF;
+  cursor: default;
+}
+
+.sidebar-item--active:after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  bottom: -20px;
+  background-color: #9013FE;
+  left: 0;
+}
+
+.sidebar-item-label {
+  font-weight: 700;
+  font-size: 12px;
+  color: #747474;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.sidebar-item__badge-count {
+  background-color: #8B97A2;
+  color: #fff;
+  padding: 3px 12px;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.sidebar-item:hover .sidebar-item__badge-count {
+  background-color: #333;
+}
+
+.sidebar-item--active .sidebar-item__badge-count,
+.sidebar-item--active:hover .sidebar-item__badge-count {
+  background-color: #0052FF;
+}

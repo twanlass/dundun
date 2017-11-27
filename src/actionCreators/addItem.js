@@ -1,4 +1,5 @@
 import * as Api from '../helpers/api.js';
+import {setTodayBadgeCount} from './setTodayBadgeCount.js';
 import {
   ADD_ITEM,
   ADD_ITEM_INDEX,
@@ -52,8 +53,9 @@ export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
 
   return (dispatch) => {
     // Immediately add item to client collection and the sort index
-    dispatch(add({id: tempId, title, createdAt, dueAt, isEvent, listId}));
+    dispatch(add({id: tempId, title, created_at: createdAt, due_at: dueAt, is_event: isEvent, list_id: listId, completed: false}));
     dispatch(addIndex(tempId, listId));
+    dispatch(setTodayBadgeCount());
 
     // Await API call response
     item.then(response => {

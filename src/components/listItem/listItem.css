@@ -57,7 +57,9 @@
 .todo {
   padding-top: 0;
   padding-bottom: 0;
-  transition-property: padding-top, padding-bottom, background-color;
+  margin-top: 0;
+  margin-bottom: 0;
+  transition-property: padding-top, padding-bottom, margin-top, margin-bottom, background-color;
   transition-duration: .1s;
   transition-timing-function: ease-in;
   background-color: #fff;
@@ -67,7 +69,9 @@
   background-color: #f9f9f9;
   padding-top: 6px;
   padding-bottom: 6px;
-  transition-property: padding-top, padding-bottom, background-color;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  transition-property: padding-top, padding-bottom, margin-top, margin-bottom, background-color;
   transition-duration: .1s;
   transition-timing-function: ease-in;
 }
