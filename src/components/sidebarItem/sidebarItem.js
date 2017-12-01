@@ -6,12 +6,18 @@ export default class SidebarItem extends React.Component {
   renderBadgeCount(list) {
     const {todayBadgeCount} = this.props;
 
-    if (list.type === 'today') {
+    if (list.title === 'today') {
       return (
         <div className="sidebar-item__badge-count">{todayBadgeCount}</div>
       )
     } else {
       return null;
+    }
+  }
+
+  renderHashtag(list) {
+    if (list.type === 'custom') {
+      return '#'
     }
   }
 
@@ -24,7 +30,9 @@ export default class SidebarItem extends React.Component {
     );
 
     return (
-      <div className={navItemClasses} onClick={() => { setActiveList(list.id); }}>{list.title}{this.renderBadgeCount(list)}</div>
+      <div className={navItemClasses} onClick={() => { setActiveList(list.id); }}>
+        {this.renderHashtag(list)}{list.title}{this.renderBadgeCount(list)}
+      </div>
     )
   }
 }

@@ -1,39 +1,44 @@
 import React from 'react';
 import classNames from 'classnames';
-import './listSectionHeader.css';
+import './listHeader.css';
 import '../../css/todo-icon-font.css';
 
-export default class ListSectionHeader extends React.Component {
+export default class ListHeader extends React.Component {
   renderToggle() {
-    let {collapsed, showDone, toggleShowDone} = this.props;
+    let {showDone, toggleShowDone} = this.props;
 
     let toggleClasses = classNames(
       'ico-filter',
       {'ico-filter--active': !showDone}
     );
 
-    if (!collapsed) {
+    return (
+      <i className={toggleClasses} onClick={() => { toggleShowDone(); }}></i>
+    )
+  }
+
+  renderDate() {
+    const {date} = this.props;
+
+    if (date) {
       return (
-        <i className={toggleClasses} onClick={() => { toggleShowDone(); }}></i>
+        <div className="list-header__date">{date}</div>
       )
-    } else {
-      return null;
     }
   }
 
   render() {
-    let {collapsed, title, viewId} = this.props;
+    const {title} = this.props;
 
     let todoListHeaderClasses = classNames(
-      'list-header',
-      'list-header--' + viewId,
-      {'list-header--active': collapsed === false}
+      'list-header'
     );
 
     return (
       <div className={todoListHeaderClasses}>
         <div className="list-header__title">
           {title}
+          {this.renderDate()}
         </div>
         {this.renderToggle()}
       </div>

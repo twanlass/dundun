@@ -39,7 +39,7 @@
   text-transform: uppercase;
 }
 
-.sidebar-item__badge-count {
+.sidebar-item__badge-count:not(:empty) {
   background-color: #8B97A2;
   color: #fff;
   padding: 3px 12px;

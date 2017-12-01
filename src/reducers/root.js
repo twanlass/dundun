@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
 import { lists } from './lists.js';
+import { listOrder } from './listOrder.js';
 import { items } from './items.js';
-import { sorts } from './sorts.js';
+import { itemOrder } from './itemOrder.js';
 import { state } from './state.js';
 
 export const rootReducer = combineReducers({
   lists,
+  listOrder,
   items,
-  sorts,
+  itemOrder,
   state
 })

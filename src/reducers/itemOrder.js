@@ -6,7 +6,7 @@ import {
   REMOVE_ITEM_INDEX
 } from '../actionTypes/actionTypes.js';
 
-export const sorts = (state = [], action) => {
+export const itemOrder = (state = [], action) => {
   let newState;
   let index;
 

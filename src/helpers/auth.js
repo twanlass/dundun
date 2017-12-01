@@ -1,3 +1,9 @@
+export const setUserToken = (token) => {
+  let user = JSON.stringify({'token':token})
+  localStorage.setItem('todo-user', user);
+  return user.token;
+}
+
 export const getUserToken = () => {
   let user = localStorage.getItem('todo-user');
   if (user) {

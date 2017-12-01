@@ -8,8 +8,14 @@ export const getListItems = listId => {
   return (dispatch) => {
     items.then(response => {
       response.json().then(response => {
-        dispatch(receiveListItems(listId, response.list.items, response.meta.sort_order))
-        dispatch(setTodayBadgeCount())
+        let items = response.list.items;
+        let meta = response.meta;
+
+        dispatch(receiveListItems(listId, items, meta.sort_order))
+
+        if (response.list.title === 'today') {
+          dispatch(setTodayBadgeCount(meta.badge_count))
+        }
       })
     })
   };

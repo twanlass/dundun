@@ -1,7 +1,5 @@
-import _ from 'lodash';
 import * as Api from '../helpers/api.js';
 import {receiveLists} from './receiveLists.js';
-import {setTodayBadgeCount} from './setTodayBadgeCount.js';
 
 export const getLists = () => {
   let lists = Api.getLists()
@@ -10,10 +8,9 @@ export const getLists = () => {
     lists.then(response => {
       response.json().then(response => {
         let lists = response.lists;
-        let todayList = _.filter(lists, { 'type': 'today'})[0];
+        let meta = response.meta;
 
-        dispatch(receiveLists(lists))
-        dispatch(setTodayBadgeCount(todayList.badge_count))
+        dispatch(receiveLists(lists, meta.sort_order))
       })
     })
   };

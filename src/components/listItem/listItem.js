@@ -52,9 +52,9 @@ export default class ListItem extends React.Component {
     this.resetNowEditing()
   }
 
-  onDone(id, completed) {
+  onDone(id, listId, completed) {
     const {done} = this.props;
-    done(id, completed)
+    done(id, listId, completed)
     this.resetNowEditing()
   }
 
@@ -86,7 +86,7 @@ export default class ListItem extends React.Component {
     let todoClasses = classNames(
       'todo',
       {'todo--editing': todo.id === nowEditing},
-      {'todo--event': todo.isEvent},
+      {'todo--event': todo.is_event},
       {'todo--completed': todo.completed}
     );
 
@@ -101,7 +101,7 @@ export default class ListItem extends React.Component {
     return (
       <div className={todoClasses} draggable={draggable} onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
         <label id={todo.id}>
-          <input type="checkbox" id={todo.id} onClick={() => { this.onDone(todo.id, !todo.completed); }} defaultChecked={todo.completed} />
+          <input type="checkbox" id={todo.id} onClick={() => { this.onDone(todo.id, todo.list_id, !todo.completed); }} defaultChecked={todo.completed} />
         </label>
         {this.renderTitle()}
         <ListItemDate todo={todo} />

@@ -6,6 +6,7 @@ import {setActiveList} from '../../actionCreators/setActiveList.js';
 const mapStateToProps = state => {
   return {
     lists: state.lists,
+    listOrder: state.listOrder,
     todayBadgeCount: state.state.todayBadgeCount,
     activeList: state.state.activeList
   }

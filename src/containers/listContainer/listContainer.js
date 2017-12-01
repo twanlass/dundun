@@ -13,7 +13,8 @@ import {getListItems} from '../../actionCreators/getListItems.js';
 const mapStateToProps = state => {
   return {
     items: state.items,
-    sorts: state.sorts,
+    itemOrder: state.itemOrder,
+    lists: state.lists,
     nowEditing: state.state.nowEditing,
     nowDragging: state.state.nowDragging,
     nowDraggingTo: state.state.nowDraggingTo,
@@ -25,10 +26,10 @@ const mapDispatchToProps = dispatch => {
   return {
     add: (title, createdAt, dueAt, isEvent, listId) => { dispatch(addItem(title, createdAt, dueAt, isEvent, listId)) },
     edit: (title, id) => { dispatch(editItem(title, id)) },
+    done: (id, listId, completed) => { dispatch(toggleItem(id, listId, completed)) },
     reorder: (id, from, to, listId) => { dispatch(reorderItem(id, from, to, listId)) },
     remove: (id, listId) => { dispatch(removeItem(id, listId)) },
     onEdit: id => { dispatch(setNowEditing(id)) },
-    done: (id, completed) => { dispatch(toggleItem(id, completed)) },
     onDrag: bool => { dispatch(setNowDragging(bool)) },
     onDragTo: sectionId => { dispatch(setNowDraggingTo(sectionId)) },
     getListItems: listId => { dispatch(getListItems(listId)) }

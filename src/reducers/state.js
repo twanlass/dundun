@@ -3,7 +3,9 @@ import {
   SET_NOW_DRAGGING,
   SET_NOW_DRAGGING_TO,
   SET_ACITVE_LIST,
-  SET_TODAY_BADGE_COUNT
+  SET_TODAY_BADGE_COUNT,
+  INCREMENT_TODAY_BADGE_COUNT,
+  DECREMENT_TODAY_BADGE_COUNT
 } from '../actionTypes/actionTypes.js';
 
 export const state = (state = initialState, action) => {
@@ -31,6 +33,16 @@ export const state = (state = initialState, action) => {
     case SET_TODAY_BADGE_COUNT:
       return Object.assign({}, state, {
         todayBadgeCount: action.count
+      })
+
+    case INCREMENT_TODAY_BADGE_COUNT:
+      return Object.assign({}, state, {
+        todayBadgeCount: state.todayBadgeCount + 1
+      })
+
+    case DECREMENT_TODAY_BADGE_COUNT:
+      return Object.assign({}, state, {
+        todayBadgeCount: state.todayBadgeCount - 1
       })
 
     default:
