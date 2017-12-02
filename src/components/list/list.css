@@ -1,5 +1,14 @@
+.todo-lists {
+  overflow-y: scroll;
+}
+
+.todo-lists,
 .todo-list {
   flex: 1 1 auto;
+}
+
+.todo-lists .todo-list {
+  margin-bottom: 20px;
 }
 
 .todo-list-options {

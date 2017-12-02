@@ -30,7 +30,7 @@ export default class listItemForm extends React.Component {
   }
 
   handleAdd(val) {
-    const {add, activeList} = this.props;
+    const {add, date, activeList} = this.props;
 
     let title = val;
     // @ todo - need to work out client / server item id creation
@@ -42,16 +42,27 @@ export default class listItemForm extends React.Component {
 
     // If a date string was passed and parsed...
     if (NLDate.length) {
-      // Set due date to date passed
-      dueAt = Moment(NLDate[0].start.date()).utc().format();
-
-      // Remove any date lanuage from todo title, like tomorrow, Friday, etc
-      title = title.replace(NLDate[0].text, '').trim();
-
       // If an exact hour / minute was passed, this todo is an event (meeting, call, dinner, etc)...
       if (NLDate[0].start.knownValues.hour || NLDate[0].start.knownValues.minute) {
         isEvent = true;
       }
+
+      // Remove any date lanuage from todo title, like tomorrow, Friday, etc
+      title = title.replace(NLDate[0].text, '').trim();
+
+      // if a day / time was parsed AND we have a date reference,
+      // set due date to parsed hour / minute on date ref day
+      if (isEvent && date) {
+        let eventHour = NLDate[0].start.knownValues.hour
+        let eventMinute = NLDate[0].start.knownValues.minute
+        dueAt = date.hour(eventHour).minute(eventMinute).second(0).utc().format()
+      } else {
+        // Set due date to date passed / parsed
+        dueAt = Moment(NLDate[0].start.date()).utc().format();
+      }
+    } else if (date) {
+      // Date reference was passed (i.e. new item added via Upcoming list)
+      dueAt = date.utc().format();
     } else {
       // No due date passed – use creation time as default due date
       dueAt = Moment.utc().format();
@@ -60,9 +71,8 @@ export default class listItemForm extends React.Component {
     add(title, createdAt, dueAt, isEvent, activeList)
   }
 
-
   render() {
-    const {nowEditing} = this.props;
+    const {nowEditing, placeholder = "What's next?"} = this.props;
     let input;
 
     return (
@@ -71,7 +81,7 @@ export default class listItemForm extends React.Component {
           <i className="ico-return"></i>
           <input
             className="list-item-form"
-            placeholder="What's next?"
+            placeholder={placeholder}
             onClick={(e) => {this.onClick()}}
             onKeyUp={(e) => { this.onEditPrevious(e) }}
             ref={(input) => {

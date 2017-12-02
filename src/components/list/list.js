@@ -1,6 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import ListSingle from './listSingle.js'
+import ListGroup from './listGroup.js'
+import ListDone from './listDone.js'
 
 export default class List extends React.Component {
   // @todo move to listContainer?
@@ -17,14 +19,24 @@ export default class List extends React.Component {
   }
 
   render() {
-    const {activeList} = this.props;
+    const {lists, activeList} = this.props;
 
     if (activeList) {
-      // conditional return based on list type
-      // this.list(activeList)
-      return (
-        <ListSingle {...this.props}/>
-      )
+      let listTitle = lists[activeList].title
+
+      if (listTitle === 'upcoming') {
+        return (
+          <ListGroup {...this.props}/>
+        )
+      } else if (listTitle === 'done') {
+        return (
+          <ListDone {...this.props}/>
+        )
+      } else {
+        return (
+          <ListSingle {...this.props}/>
+        )
+      }
     } else {
       return null;
     }

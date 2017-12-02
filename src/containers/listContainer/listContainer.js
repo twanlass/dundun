@@ -15,10 +15,10 @@ const mapStateToProps = state => {
     items: state.items,
     itemOrder: state.itemOrder,
     lists: state.lists,
+    activeList: state.state.activeList,
     nowEditing: state.state.nowEditing,
     nowDragging: state.state.nowDragging,
-    nowDraggingTo: state.state.nowDraggingTo,
-    activeList: state.state.activeList
+    nowDraggingTo: state.state.nowDraggingTo
   }
 }
 

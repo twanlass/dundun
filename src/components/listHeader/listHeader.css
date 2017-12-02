@@ -15,6 +15,7 @@
   align-items: center;
   transition: color .15s;
   flex:none;
+  min-height: 64px;
 }
 
 .list-header__title {
@@ -36,6 +37,7 @@
   font-size: 10px;
   padding: 10px;
   transition: color .15s;
+  cursor: pointer;
 }
 
 .list-header .ico-filter:hover {

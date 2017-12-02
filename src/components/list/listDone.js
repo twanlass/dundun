@@ -8,28 +8,13 @@ import ListItem from '../listItem/listItem.js';
 import ListItemForm from '../listItemForm/listItemForm.js';
 import './list.css';
 
-export default class ListGroup extends React.Component {
+export default class ListDone extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       showDone: true
     };
-  }
-
-  componentDidMount() {
-    this.scrollList()
-  }
-
-  componentDidUpdate() {
-    this.scrollList()
-  }
-
-  scrollList() {
-    let list = document.getElementsByClassName('todo-lists')
-    if (list.length) {
-      list[0].scrollTop = 0
-    }
   }
 
   toggleShowDone() {
@@ -121,17 +106,16 @@ export default class ListGroup extends React.Component {
     });
 
     for (var i = 1; i < 8; i++) {
-      let day = Moment().add(i, 'day');
+      let day = Moment().subtract(i, 'day');
       let dueToday = _.filter(upcomingItems, function(i) {
         return Moment(i.due_at).isSame(day.valueOf(), 'day')
       });
 
-      let title = i === 1 ? 'tomorrow' : day.format('dddd')
+      let title = i === 1 ? 'yesterday' : day.format('dddd')
 
       days.push({
         'title': title,
-        'dateString': day.format('MMM Do'),
-        'date': day,
+        'date': day.format('MMM Do'),
         items: dueToday
       })
     }
@@ -154,14 +138,14 @@ export default class ListGroup extends React.Component {
       return (
         <div className="todo-lists">
           {days.map(day => (
-            <div className="todo-list" key={day.dateString}>
+            <div className="todo-list" key={day.date}>
               <ListHeader
-                key={day.dateString}
+                key={day.date}
                 showDone={this.state.showDone}
                 toggleShowDone={this.toggleShowDone.bind(this)}
                 showToggle={false}
                 title={day.title}
-                date={day.dateString}
+                date={day.date}
               />
               <CSSTransitionGroup
                 transitionName="todo-"
@@ -187,14 +171,6 @@ export default class ListGroup extends React.Component {
                     />
                 ))}
               </CSSTransitionGroup>
-              <ListItemForm
-                add={add}
-                onEdit={onEdit}
-                nowEditing={nowEditing}
-                lastItemId={lastItemId}
-                activeList={activeList}
-                date={day.date}
-              />
             </div>
           ))}
         </div>

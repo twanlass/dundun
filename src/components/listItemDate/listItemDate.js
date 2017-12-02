@@ -34,10 +34,7 @@ export default class ListItemDate extends React.Component {
       dateString = this.renderTime(todo)
     // A future event item
     } else if (todo.is_event && isFuture(todo)) {
-      dateString = this.renderDayAndTime(todo)
-    // A future non-event item
-    } else if (isFuture(todo)) {
-      dateString = this.renderDay(todo)
+      dateString = this.renderTime(todo)
     } else {
       return null;
     }

@@ -5,16 +5,18 @@ import '../../css/todo-icon-font.css';
 
 export default class ListHeader extends React.Component {
   renderToggle() {
-    let {showDone, toggleShowDone} = this.props;
+    let {showDone, toggleShowDone, showToggle = true} = this.props;
 
     let toggleClasses = classNames(
       'ico-filter',
       {'ico-filter--active': !showDone}
     );
 
-    return (
-      <i className={toggleClasses} onClick={() => { toggleShowDone(); }}></i>
-    )
+    if (showToggle) {
+      return (
+        <i className={toggleClasses} onClick={() => { toggleShowDone(); }}></i>
+      )
+    }
   }
 
   renderDate() {
