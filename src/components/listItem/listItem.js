@@ -71,7 +71,7 @@ export default class ListItem extends React.Component {
 
     if (todo.id === nowEditing) {
       return (
-        <input className="todo__title" type="text" title={todo.id + ' – ' + todo.title} defaultValue={todo.title} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }} />
+        <input className="todo__title" type="text" title={todo.title} defaultValue={todo.title} autoFocus={true} onFocus={(e) => { this.onFocus(e) }} onKeyUp={(e) => { this.onEnter(todo.id, e) }} />
       )
     } else {
       return (

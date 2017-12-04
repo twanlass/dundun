@@ -22,3 +22,5 @@ export const sortDueAtAsc = (a,b) => a.due_at - b.due_at;
 
 export const sortCompletedAtDesc = (a,b) => b.completedAt - a.completedAt;
 export const sortCompletedAtAsc = (a,b) => a.completedAt - b.completedAt;
+
+export const sortIdx = (a,b) => b.idx - a.idx;

@@ -1,4 +1,3 @@
-import Moment from 'moment';
 import * as Api from '../helpers/api.js';
 import { TOGGLE_ITEM } from '../actionTypes/actionTypes.js';
 import {incrementTodayBadgeCount} from './incrementTodayBadgeCount.js';
@@ -8,8 +7,7 @@ const toggle = (id, completed) => {
   return {
     type: TOGGLE_ITEM,
     id,
-    completed,
-    completed_at: Moment.utc().format()
+    completed
   }
 }
 

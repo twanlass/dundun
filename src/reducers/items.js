@@ -29,7 +29,6 @@ export const items = (state = initialItems, action) => {
     case TOGGLE_ITEM:
       newState = Object.assign({}, state);
       newState[action.id].completed = action.completed
-      newState[action.id].completed_at = action.completed ? action.completed_at : newState[action.id].completed_at
       return newState
 
     case RECEIVE_LIST_ITEMS:

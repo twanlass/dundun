@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import { CSSTransitionGroup } from 'react-transition-group';
 import ListHeader from '../listHeader/listHeader.js'
 import ListItem from '../listItem/listItem.js';
-import ListItemForm from '../listItemForm/listItemForm.js';
 import './list.css';
 
 export default class ListDone extends React.Component {
@@ -124,9 +123,7 @@ export default class ListDone extends React.Component {
   }
 
   render() {
-    const {itemOrder, add, remove, done, reorder, edit, onEdit, nowEditing, nowDragging, activeList}  = this.props;
-
-    let lastItemId = null
+    const {itemOrder, remove, done, reorder, edit, onEdit, nowEditing, nowDragging, activeList}  = this.props;
 
     let itemsClasses = classNames(
       'todos',
