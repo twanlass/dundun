@@ -21,6 +21,11 @@ body {
   overflow: hidden;
 }
 
+.flex-container {
+  display: flex;
+  width: 100%;
+}
+
 .input[type="checkbox"] {
   margin: 0;
 }

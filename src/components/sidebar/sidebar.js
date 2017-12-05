@@ -1,4 +1,5 @@
 import React from 'react';
+import browserHistory from '../../helpers/history.js';
 import _ from 'lodash';
 import './sidebar.css';
 import SidebarItem from '../sidebarItem/sidebarItem.js';
@@ -16,6 +17,16 @@ export default class Sidebar extends React.Component {
     if (nextProps.listOrder.length && activeList === null) {
       setActiveList(nextProps.listOrder[0])
     }
+  }
+
+  gotoLogin() {
+    const pathname = '/login';
+    const search = '';
+    const location = {pathname, search};
+
+    // Update the browser URL and notify any listeners added
+    // via browserHistory.listen()
+    browserHistory.push(location);
   }
 
   render() {
@@ -39,6 +50,11 @@ export default class Sidebar extends React.Component {
           {customLists.map(list => (
             <SidebarItem key={list.id} list={list} setActiveList={setActiveList} activeList={activeList} />
           ))}
+        </div>
+
+        <div className="sidebar-group">
+          <div className="sidebar-item-label">Settings</div>
+          <div className="sidebar-item" onClick={() => { this.gotoLogin(); }}>Login</div>
         </div>
       </div>
     );

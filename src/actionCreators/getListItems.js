@@ -4,10 +4,10 @@ import {setTodayBadgeCount} from './setTodayBadgeCount.js';
 
 export const getListItems = listId => {
   return (dispatch, getState) => {
-    const {itemOrder} = getState();
+    // const {itemOrder} = getState();
 
     // If itemOrder is undefined we need to fetch list data from the API
-    if (!itemOrder[listId]) {
+    // if (!itemOrder[listId]) {
       let items = Api.getListItems(listId)
       items.then(response => {
         response.json().then(response => {
@@ -21,6 +21,6 @@ export const getListItems = listId => {
           }
         })
       })
-    }
+    // }
   };
 }

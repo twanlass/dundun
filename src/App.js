@@ -1,14 +1,28 @@
 import React from 'react';
-import './css/app.css';
-import './css/todo-icon-font.css';
-import List from './containers/listContainer/listContainer.js';
-import Nav from './containers/sidebarContainer/sidebarContainer.js';
+import browserHistory from './helpers/history.js';
+import Router from './components/router/router.js';
 
-const App = () => (
-  <div className="todos-app">
-    <Nav />
-    <List />
-  </div>
-)
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
 
-export default App;
+    // Set the initial location
+    this.state = {
+      location: browserHistory.location
+    };
+  }
+
+  componentDidMount() {
+    this.unsubscribe = browserHistory.listen(location => {
+      this.setState({location});
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    return <Router location={this.state.location}/>
+  }
+}
