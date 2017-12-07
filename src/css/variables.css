@@ -1,0 +1,15 @@
+:root {
+  /*Colors*/
+  --color__primary: #0366d6;
+
+  /*Font Family*/
+  --font-family: 'Roboto', sans-serif;
+
+  /*Font weight scale*/
+  --weight__normal: 400;
+  --weight__medium: 500;
+  --weight__bold: 700;
+
+  /*Misc*/
+  --border-radius: 3px;
+}

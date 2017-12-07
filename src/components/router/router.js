@@ -1,5 +1,6 @@
 import React from 'react';
 import AppContainer from '../../containers/appContainer/appContainer.js';
+import AuthContainer from '../../containers/authContainer/authContainer.js';
 
 export default class Router extends React.Component {
   route() {
@@ -14,7 +15,7 @@ export default class Router extends React.Component {
 
       case '/login':
         return (
-          <h1>Login page</h1>
+          <AuthContainer/>
         )
 
       default:

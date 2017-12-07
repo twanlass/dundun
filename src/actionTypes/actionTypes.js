@@ -29,3 +29,6 @@ export const ADD_ITEM_INDEX = 'ADD_ITEM_INDEX'
 export const EDIT_ITEM_INDEX = 'EDIT_ITEM_INDEX'
 export const REORDER_ITEM_INDEX = 'REORDER_ITEM_INDEX'
 export const REMOVE_ITEM_INDEX = 'REMOVE_ITEM_INDEX'
+
+// User actions
+export const LOGOUT = 'LOGOUT'

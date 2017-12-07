@@ -1,3 +1,5 @@
+import browserHistory from '../helpers/history.js';
+
 export const setUserToken = (token) => {
   let user = JSON.stringify({'token':token})
   localStorage.setItem('todo-user', user);
@@ -5,10 +7,11 @@ export const setUserToken = (token) => {
 }
 
 export const getUserToken = () => {
+  console.log('get user token...')
   let user = localStorage.getItem('todo-user');
   if (user) {
     return JSON.parse(user).token
   } else {
-    throw new Error("User is not signed in");
+    browserHistory.push('/login','');
   }
 }

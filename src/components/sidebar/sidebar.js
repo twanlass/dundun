@@ -1,5 +1,4 @@
 import React from 'react';
-import browserHistory from '../../helpers/history.js';
 import _ from 'lodash';
 import './sidebar.css';
 import SidebarItem from '../sidebarItem/sidebarItem.js';
@@ -19,19 +18,9 @@ export default class Sidebar extends React.Component {
     }
   }
 
-  gotoLogin() {
-    const pathname = '/login';
-    const search = '';
-    const location = {pathname, search};
-
-    // Update the browser URL and notify any listeners added
-    // via browserHistory.listen()
-    browserHistory.push(location);
-  }
-
   render() {
     // new list options = things to do / things to remember
-    const {lists, todayBadgeCount, setActiveList, activeList} = this.props;
+    const {lists, todayBadgeCount, setActiveList, activeList, logout} = this.props;
 
     let coreLists = _.filter(lists, { 'type': 'core'});
     let customLists = _.filter(lists, { 'type': 'custom'});
@@ -54,7 +43,7 @@ export default class Sidebar extends React.Component {
 
         <div className="sidebar-group">
           <div className="sidebar-item-label">Settings</div>
-          <div className="sidebar-item" onClick={() => { this.gotoLogin(); }}>Login</div>
+          <div className="sidebar-item" onClick={logout}>Logout</div>
         </div>
       </div>
     );

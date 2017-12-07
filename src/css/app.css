@@ -6,9 +6,8 @@ html {
     height: 100%;
     overflow: hidden;
 }
+
 body {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400;
     height: 100%;
     margin: 0;
     overflow: auto;
@@ -24,50 +23,6 @@ body {
 .flex-container {
   display: flex;
   width: 100%;
-}
-
-.input[type="checkbox"] {
-  margin: 0;
-}
-
-label {
-  line-height: 0;
-  cursor: default;
-  padding: 10px 5px 10px 0;
-  user-select: none;
-  margin-right: 6px;
-}
-
-form {
-  width: 100%;
-  display: flex;
-  align-items: center;
-}
-
-.todo--enter {
-  opacity: 0.01;
-  height: 20px;
-}
-
-.todo--enter.todo--enter-active {
-  opacity: 1;
-  transition-property: opacity, height;
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
-  height: 38px;
-}
-
-.todo--leave {
-  opacity: 1;
-  height: 43px;
-}
-
-.todo--leave.todo--leave-active {
-  opacity: 0;
-  transition-property: opacity, height;
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
-  height: 1px;
 }
 
 @keyframes todo-highlight {

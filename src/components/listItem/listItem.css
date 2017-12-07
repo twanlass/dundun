@@ -155,3 +155,33 @@
 .todos--drag-active .todo * {
   pointer-events: none;
 }
+
+.todo--enter {
+  opacity: 0.01;
+  height: 20px;
+}
+
+.todo--enter.todo--enter-active {
+  opacity: 1;
+  transition-property: opacity, height;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+  height: 38px;
+}
+
+.todo--leave {
+  opacity: 1;
+  height: 43px;
+}
+
+.todo--leave.todo--leave-active {
+  opacity: 0;
+  transition-property: opacity, height;
+  transition-duration: 150ms;
+  transition-timing-function: ease-in-out;
+  height: 1px;
+}
+
+.input[type="checkbox"] {
+  margin: 0;
+}

@@ -1,0 +1,30 @@
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+}
+
+.form-header {
+  font-size: 28px;
+  font-weight: var(--weight__bold);
+}
+
+.form-input {
+  border: 1px solid #ccc;
+  font-size: 18px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.form-label {
+  margin-bottom: 4px;
+  text-align: left;
+  width: 100%;
+}

@@ -1,14 +1,12 @@
-import { combineReducers } from 'redux';
-import { lists } from './lists.js';
-import { listOrder } from './listOrder.js';
-import { items } from './items.js';
-import { itemOrder } from './itemOrder.js';
-import { state } from './state.js';
+import {LOGOUT} from '../actionTypes/actionTypes.js'
+import { appReducer } from './app.js';
 
-export const rootReducer = combineReducers({
-  lists,
-  listOrder,
-  items,
-  itemOrder,
-  state
-})
+export const rootReducer = (state, action) => {
+  console.log(action)
+  // On logout action, clear redux store
+  if (action.type === LOGOUT) {
+    state = undefined
+  }
+
+  return appReducer(state, action)
+}

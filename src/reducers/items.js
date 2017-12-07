@@ -7,7 +7,6 @@ import {
 } from '../actionTypes/actionTypes.js';
 
 export const items = (state = initialItems, action) => {
-  console.log(action)
   let newState;
 
   switch (action.type) {
