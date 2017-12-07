@@ -1,0 +1,45 @@
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 100%;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  max-width: 300px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.form-header {
+  font-size: 34px;
+  font-weight: var(--weight__bold);
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-input {
+  border: 1px solid #ccc;
+  font-family: inherit;
+  font-size: 16px;
+  font-size: 18px;
+  font-weight: var(--weight__medium);
+  height: 42px;
+  margin-bottom: 16px;
+  padding: 0;
+  text-indent: 10px;
+  width: 100%;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: var(--weight__bold);
+  margin-bottom: 4px;
+  text-align: left;
+  text-transform: uppercase;
+  width: 100%;
+  user-select: none;
+}

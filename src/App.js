@@ -6,6 +6,7 @@ import './css/variables.css';
 import './css/app.css';
 import './css/typography.css';
 import './css/form.css';
+import './css/button.css';
 import './css/todo-icon-font.css';
 
 export default class App extends React.Component {

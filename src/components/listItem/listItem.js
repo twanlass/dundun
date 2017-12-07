@@ -100,7 +100,7 @@ export default class ListItem extends React.Component {
 
     return (
       <div className={todoClasses} draggable={draggable} onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
-        <label id={todo.id}>
+        <label className="todo-label" id={todo.id}>
           <input type="checkbox" id={todo.id} onClick={() => { this.onDone(todo.id, todo.list_id, !todo.completed); }} defaultChecked={todo.completed} />
         </label>
         {this.renderTitle()}

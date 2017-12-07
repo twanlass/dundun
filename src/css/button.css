@@ -1,0 +1,17 @@
+.btn {
+  align-items: center;
+  appearance: none;
+  background-color: var(--color__primary);
+  border-radius: 0;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: var(--weight__medium);
+  height: 42px;
+  justify-content: center;
+  letter-spacing: .25px;
+  width: 100%;
+}

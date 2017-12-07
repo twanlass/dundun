@@ -32,9 +32,18 @@ export default class LoginForm extends React.Component {
     })
   }
 
-  onSubmit() {
-    console.log('validate form, then submit')
-    this.login()
+  validate() {
+    let email = this.state.email
+    let password = this.state.password
+
+    return email && password ? true : false;
+  }
+
+  onSubmit(e) {
+    e.preventDefault()
+    if (this.validate()) {
+      this.login()
+    }
   }
 
   handleInputChange(e) {
@@ -48,15 +57,16 @@ export default class LoginForm extends React.Component {
 
   render() {
     return (
-      <div className="form-wrapper">
-        <form className="form">
-            <div className="form-header">Welcome back</div>
+      <div className="form-wrapper login-form">
+        <form className="form" onSubmit={this.onSubmit.bind(this)}>
+            <div className="form-header">Welcome back, friend.</div>
             <label className="form-label">Email</label>
-            <input className="form-input" name="email" type="text" value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
+            <input className="form-input" name="email" type="text" autoFocus={true} value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
             <label className="form-label">Password</label>
             <input className="form-input" name="password" type="password" value={this.state.password} onChange={this.handleInputChange.bind(this)}/>
-            <div onClick={(e) => {this.onSubmit()}}>Sign in</div>
+            <input className="btn" type="submit" value="Sign in" />
         </form>
+        <div className="login-form-copyright">&copy; 2017-2018 48 Made LLC.</div>
       </div>
     )
   }

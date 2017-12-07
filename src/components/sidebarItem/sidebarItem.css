@@ -17,7 +17,7 @@
 
 .sidebar-item--active,
 .sidebar-item--active:hover {
-  color: #0052FF;
+  color: var(--color__primary);
   cursor: default;
 }
 
@@ -55,5 +55,5 @@
 
 .sidebar-item--active .sidebar-item__badge-count,
 .sidebar-item--active:hover .sidebar-item__badge-count {
-  background-color: #0052FF;
+  background-color: var(--color__primary);
 }
