@@ -12,18 +12,11 @@ const edit = (title, id) => {
 }
 
 export const editItem = (title, id) => {
-  // Create API fetch / promise
-  let item = Api.updateListItem({id, title})
-
   return (dispatch) => {
+    // Update via API
+    Api.updateListItem({id, title})
+
     // Immediately edit item in client collection
     dispatch(edit(title, id));
-
-    // Await API call response
-    item.then(response => {
-      response.json().then(response => {
-        // @todo handle errors
-      })
-    })
   };
 }

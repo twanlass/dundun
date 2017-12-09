@@ -6,12 +6,12 @@ export const getLists = () => {
 
   return (dispatch) => {
     lists.then(response => {
-      response.json().then(response => {
+      if (response) {
         let lists = response.lists;
         let meta = response.meta;
 
         dispatch(receiveLists(lists, meta.sort_order))
-      })
+      }
     })
-  };
+  }
 }

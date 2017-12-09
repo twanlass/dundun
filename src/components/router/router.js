@@ -5,9 +5,9 @@ import AuthContainer from '../../containers/authContainer/authContainer.js';
 export default class Router extends React.Component {
   route() {
     const {location} = this.props;
-    console.log(location)
+    let route = location.pathname;
 
-    switch (location.pathname) {
+    switch (route) {
       case '/today':
         return (
           <AppContainer/>

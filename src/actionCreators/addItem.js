@@ -64,7 +64,7 @@ export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
 
     // Await API call response
     item.then(response => {
-      response.json().then(response => {
+      if (response) {
         let item = response.item
         let meta = response.meta
 
@@ -73,7 +73,7 @@ export const addItem = (title, createdAt, dueAt, isEvent, listId) => {
         dispatch(add(Object.assign({cid: tempId}, {...item})))
         dispatch(remove(tempId))
         dispatch(editIndex(item.id, tempId, meta.list_id))
-      })
+      }
     })
   };
 }

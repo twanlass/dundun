@@ -7,11 +7,24 @@ export const setUserToken = (token) => {
 }
 
 export const getUserToken = () => {
-  console.log('get user token...')
   let user = localStorage.getItem('todo-user');
   if (user) {
     return JSON.parse(user).token
   } else {
     browserHistory.push('/login','');
   }
+}
+
+export const isLoggedIn = () => {
+  let user = localStorage.getItem('todo-user');
+  if (!user) {
+    logoutUser()
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export const logoutUser = () => {
+  browserHistory.push('/login','');
 }

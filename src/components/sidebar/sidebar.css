@@ -10,3 +10,8 @@
 .sidebar-group {
   margin-bottom: 30px;
 }
+
+.sidebar-group--settings {
+  margin-top: auto;
+  margin-bottom: 0px;
+}

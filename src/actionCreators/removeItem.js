@@ -21,9 +21,10 @@ const removeIndex = (id, listId) => {
 }
 
 export const removeItem = (id, listId) => {
-  let item = Api.deleteListItem(id)
-
   return (dispatch, getState) => {
+    // Update via API
+    Api.deleteListItem(id)
+
     // Immediately remove item from client collection and sort index
     dispatch(remove(id))
     dispatch(removeIndex(id, listId))
@@ -33,12 +34,5 @@ export const removeItem = (id, listId) => {
     if (lists[listId].title === 'today') {
       dispatch(decrementTodayBadgeCount());
     }
-
-    // Dispatch API call to delete item and await response
-    item.then(response => {
-      response.json().then(response => {
-        // @todo handle error
-      })
-    })
   };
 }

@@ -12,10 +12,10 @@ const toggle = (id, completed) => {
 }
 
 export const toggleItem = (id, listId, completed) => {
-  // Create API fetch / promise
-  let item = Api.updateListItem({id, completed})
-
   return (dispatch, getState) => {
+    // Update via API
+    Api.updateListItem({id, completed})
+
     // Immediately toggle item in client collection
     dispatch(toggle(id, completed));
 
@@ -24,12 +24,5 @@ export const toggleItem = (id, listId, completed) => {
     if (lists[listId].title === 'today') {
       completed ? dispatch(decrementTodayBadgeCount()) : dispatch(incrementTodayBadgeCount())
     }
-
-    // Await API call response
-    item.then(response => {
-      response.json().then(response => {
-        // @todo handle errors
-      })
-    })
   };
 }

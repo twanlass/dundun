@@ -3,7 +3,6 @@ import _ from 'lodash';
 import Moment from 'moment';
 import classNames from 'classnames';
 import { CSSTransitionGroup } from 'react-transition-group';
-// import {sortIdx} from '../../helpers/helpers.js';
 import ListHeader from '../listHeader/listHeader.js'
 import ListItem from '../listItem/listItem.js';
 import ListItemForm from '../listItemForm/listItemForm.js';

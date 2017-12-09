@@ -4,7 +4,7 @@
   align-items: center;
   cursor: pointer;
   padding-right: 20px;
-  padding-left: 20px;
+  padding-left: 10px;
   position: relative;
 }
 
@@ -192,4 +192,17 @@
   padding: 10px 5px 10px 0;
   user-select: none;
   margin-right: 6px;
+}
+
+.todo:hover .ico-re-order {
+  opacity: 1;
+}
+
+.ico-re-order,
+.todo:hover.todo--editing .ico-re-order {
+  font-size: 10px;
+  color: #ccc;
+  margin-right: 4px;
+  cursor: move;
+  opacity: 0;
 }

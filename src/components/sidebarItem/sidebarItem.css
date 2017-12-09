@@ -8,6 +8,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  user-select: none;
 }
 
 .sidebar-item:hover {
@@ -37,6 +38,8 @@
   color: #747474;
   margin-bottom: 6px;
   text-transform: uppercase;
+  user-select: none;
+  cursor: default;
 }
 
 .sidebar-item__badge-count:not(:empty) {

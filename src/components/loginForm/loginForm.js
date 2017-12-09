@@ -20,15 +20,14 @@ export default class LoginForm extends React.Component {
     let user = Api.login({email, password})
 
     user.then(response => {
-      response.json().then(response => {
-        // @todo: handle 404 Error
-
+      console.log(response)
+      if (response) {
         // Store user token for API calls
         Auth.setUserToken(response.jwt);
 
         // Route user to Today list
         browserHistory.push('/today','');
-      })
+      }
     })
   }
 
