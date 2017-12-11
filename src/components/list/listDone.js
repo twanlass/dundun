@@ -107,23 +107,26 @@ export default class ListDone extends React.Component {
     for (var i = 1; i < 8; i++) {
       let day = Moment().subtract(i, 'day');
       let dueToday = _.filter(upcomingItems, function(i) {
-        return Moment(i.due_at).isSame(day.valueOf(), 'day')
+        return Moment(i.completed_at).isSame(day.valueOf(), 'day')
       });
 
-      let title = i === 1 ? 'yesterday' : day.format('dddd')
+      // Skip days with no done items
+      if (dueToday.length) {
+        let title = i === 1 ? 'yesterday' : day.format('dddd')
 
-      days.push({
-        'title': title,
-        'date': day.format('MMM Do'),
-        items: dueToday
-      })
+        days.push({
+          'title': title,
+          'date': day.format('MMM Do'),
+          items: dueToday
+        })
+      }
     }
 
     return days;
   }
 
   render() {
-    const {itemOrder, remove, done, reorder, edit, onEdit, nowEditing, nowDragging, activeList}  = this.props;
+    const {itemOrder, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
 
     let itemsClasses = classNames(
       'todos',
@@ -157,8 +160,10 @@ export default class ListDone extends React.Component {
                     todo={item}
                     key={this.itemKey(item)}
                     nowEditing={nowEditing}
+                    nowCompleting={nowCompleting}
                     remove={remove}
                     done={done}
+                    onDone={onDone}
                     reorder={reorder}
                     edit={edit}
                     onEdit={onEdit}

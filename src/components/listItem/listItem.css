@@ -76,14 +76,6 @@
   transition-timing-function: ease-in;
 }
 
-.todo--highlight {
-  animation-duration: 1s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: 1;
-  animation-name: todo-highlight;
-  animation-timing-function: ease-in-out;
-}
-
 .todos {
   margin-top: 6px;
 }
@@ -101,6 +93,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
   .todo__title a {
@@ -148,7 +142,7 @@
 }
 
 .todo--completed .todo__title {
-  text-decoration: line-through;
+  /*text-decoration: line-through;*/
 }
 
 /*Ensure todo child elements are not drop targets for drag / drop sorting*/
@@ -192,6 +186,8 @@
   padding: 10px 5px 10px 0;
   user-select: none;
   margin-right: 6px;
+  position: relative;
+  z-index: 1;
 }
 
 .todo:hover .ico-re-order {
@@ -205,4 +201,39 @@
   margin-right: 4px;
   cursor: move;
   opacity: 0;
+}
+
+.todo-highlight {
+  background-color: #9abafe;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  transform-origin: left center;
+  width: 0;
+  z-index: 0;
+}
+
+.todo-highlight--active {
+  animation-duration: .75s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-name: todo-highlight;
+  animation-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+}
+
+@keyframes todo-highlight {
+  0% {
+    width: 0;
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  50% {
+    width: 100%;
+    transform: scale(1);
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
 }

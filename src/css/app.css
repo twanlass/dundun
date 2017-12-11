@@ -24,12 +24,3 @@ body {
   display: flex;
   width: 100%;
 }
-
-@keyframes todo-highlight {
-    0% {
-        background-color: #fde499;
-    }
-    100 {
-        background-color: #fff;
-    }
-}

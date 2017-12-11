@@ -1,5 +1,6 @@
 import {
   SET_NOW_EDITING,
+  SET_NOW_COMPLETING,
   SET_NOW_DRAGGING,
   SET_NOW_DRAGGING_TO,
   SET_ACITVE_LIST,
@@ -13,6 +14,11 @@ export const state = (state = initialState, action) => {
     case SET_NOW_EDITING:
       return Object.assign({}, state, {
         nowEditing: action.id
+      })
+
+    case SET_NOW_COMPLETING:
+      return Object.assign({}, state, {
+        nowCompleting: action.id
       })
 
     case SET_NOW_DRAGGING:

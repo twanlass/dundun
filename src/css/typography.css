@@ -2,3 +2,7 @@ body {
     font-family: var(--font-family);
     font-weight: var(--weight__normal);
 }
+
+code {
+  font-family: var(--font-family-mono);
+}

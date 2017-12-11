@@ -10,99 +10,65 @@ const headers = () => {
 
 // List Endpoionts
 export const getLists = () => {
-  return fetch(baseUrl + 'lists', {
+  return fetchWrapper({
+    url: 'lists',
     method: 'GET',
     headers: headers()
-  })
-  .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new ErrorObject(response.status, response.statusText)
-  })
-  .catch(error => {
-    handleError(error)
   })
 }
 
 // Item Endpoints
 export const getListItems = listId => {
-  return fetch(baseUrl + 'lists/' + listId, {
+  return fetchWrapper({
+    url: 'lists/' + listId,
     method: 'GET',
     headers: headers()
-  })
-  .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new ErrorObject(response.status, response.statusText)
-  })
-  .catch(error => {
-    handleError(error)
   })
 }
 
 export const postListItem = (item) => {
-  return fetch(baseUrl + 'items', {
+  return fetchWrapper({
+    url: 'items',
     method: 'POST',
     headers: headers(),
     body: JSON.stringify(item)
   })
-  .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new ErrorObject(response.status, response.statusText)
-  })
-  .catch(error => {
-    handleError(error)
-  })
 }
 
 export const updateListItem = (item) => {
-  return fetch(baseUrl + 'items/' + item.id, {
+  return fetchWrapper({
+    url: 'items/' + item.id,
     method: 'PUT',
     headers: headers(),
     body: JSON.stringify(item)
   })
-  .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new ErrorObject(response.status, response.statusText)
-  })
-  .catch(error => {
-    handleError(error)
-  })
 }
 
 export const deleteListItem = (id) => {
-  return fetch(baseUrl + 'items/' + id, {
+  return fetchWrapper({
+    url: 'items/' + id,
     method: 'DELETE',
     headers: headers()
-  })
-  .then(response => {
-    if (response.status === 200) {
-      return response.json();
-    }
-    throw new ErrorObject(response.status, response.statusText)
-  })
-  .catch(error => {
-    handleError(error)
   })
 }
 
 // Auth Endpoints
 export const login = (user) => {
-  return fetch(baseUrl + 'auth', {
+  return fetchWrapper({
+    url: 'auth',
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({auth: user})
   })
+}
+
+// Generic fetch wrapper
+const fetchWrapper = (options) => {
+  return fetch(baseUrl + options.url, {
+    ...options
+  })
   .then(response => {
-    if (response.status === 201) {
+    if (response.status >= 200 && response.status < 300) {
       return response.json();
     }
     throw new ErrorObject(response.status, response.statusText)

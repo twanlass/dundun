@@ -52,7 +52,17 @@ export default class ListItem extends React.Component {
     this.resetNowEditing()
   }
 
-  onDone(id, listId, completed) {
+  onDone(id, completed) {
+    const {onDone} = this.props;
+
+    if (completed) {
+      onDone(id)
+    } else {
+      onDone(null)
+    }
+  }
+
+  handleDone(id, listId, completed) {
     const {done} = this.props;
     done(id, listId, completed)
     this.resetNowEditing()
@@ -81,7 +91,7 @@ export default class ListItem extends React.Component {
   }
 
   render() {
-    const {todo, nowEditing, dragStart, dragEnd} = this.props;
+    const {todo, nowEditing, nowCompleting, dragStart, dragEnd} = this.props;
 
     let todoClasses = classNames(
       'todo',
@@ -95,6 +105,11 @@ export default class ListItem extends React.Component {
       {'todo__actions--active': todo.id === nowEditing}
     );
 
+    let todoHighlightClasses = classNames(
+      'todo-highlight',
+      {'todo-highlight--active': todo.id === nowCompleting}
+    );
+
     // If the item id we're editing is null, allow dragging
     let draggable = nowEditing ? false : true;
 
@@ -102,13 +117,22 @@ export default class ListItem extends React.Component {
       <div className={todoClasses} draggable={draggable} onDragStart={dragStart} onDragEnd={dragEnd} data-id={todo.id}>
         <i className="ico-re-order"></i>
         <label className="todo-label" id={todo.id}>
-          <input type="checkbox" id={todo.id} onClick={() => { this.onDone(todo.id, todo.list_id, !todo.completed); }} defaultChecked={todo.completed} />
+          <input
+            type="checkbox"
+            id={todo.id}
+            onClick={() => {
+              this.handleDone(todo.id, todo.list_id, !todo.completed);
+              this.onDone(todo.id, todo.completed)
+            }}
+            defaultChecked={todo.completed}
+          />
         </label>
         {this.renderTitle()}
         <ListItemDate todo={todo} />
         <div className={todoActionClasses}>
           <i className="ico-trash" onClick={() => { this.onRemove(todo.id); }}></i>
         </div>
+        <div className={todoHighlightClasses}></div>
       </div>
     );
   };

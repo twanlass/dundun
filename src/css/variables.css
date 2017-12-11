@@ -4,6 +4,7 @@
 
   /*Font Family*/
   --font-family: 'Roboto', sans-serif;
+  --font-family-mono: 'Roboto Mono', monospace;
 
   /*Font weight scale*/
   --weight__normal: 400;

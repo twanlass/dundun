@@ -140,7 +140,7 @@ export default class ListGroup extends React.Component {
   }
 
   render() {
-    const {itemOrder, add, remove, done, reorder, edit, onEdit, nowEditing, nowDragging, activeList}  = this.props;
+    const {itemOrder, add, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
 
     let lastItemId = null
 
@@ -176,8 +176,10 @@ export default class ListGroup extends React.Component {
                     todo={item}
                     key={this.itemKey(item)}
                     nowEditing={nowEditing}
+                    nowCompleting={nowCompleting}
                     remove={remove}
                     done={done}
+                    onDone={onDone}
                     reorder={reorder}
                     edit={edit}
                     onEdit={onEdit}

@@ -1,10 +1,7 @@
-.todo-lists {
-  overflow-y: scroll;
-}
-
 .todo-lists,
 .todo-list {
   flex: 1 1 auto;
+  overflow-y: scroll;
 }
 
 .todo-lists .todo-list {

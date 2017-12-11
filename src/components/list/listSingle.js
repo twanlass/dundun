@@ -114,7 +114,7 @@ export default class ListSingle extends React.Component {
   }
 
   render() {
-    const {items, itemOrder, nowEditing, nowDragging, add, remove, done, reorder, edit, onEdit, activeList}  = this.props;
+    const {items, itemOrder, nowEditing, nowCompleting, nowDragging, add, remove, done, onDone, reorder, edit, onEdit, activeList}  = this.props;
 
     let order = itemOrder[activeList];
     let completedItems = []
@@ -160,8 +160,10 @@ export default class ListSingle extends React.Component {
                 todo={item}
                 key={this.itemKey(item)}
                 nowEditing={nowEditing}
+                nowCompleting={nowCompleting}
                 remove={remove}
                 done={done}
+                onDone={onDone}
                 reorder={reorder}
                 edit={edit}
                 onEdit={onEdit}
