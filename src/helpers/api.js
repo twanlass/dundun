@@ -1,6 +1,6 @@
 import * as Auth from '../helpers/auth.js';
 
-const baseUrl = 'http://localhost:3001/v1/'
+const baseUrl = 'htts://api.getdundun.com/v1/'
 const headers = () => {
   return {
     'Content-Type': 'application/json',
