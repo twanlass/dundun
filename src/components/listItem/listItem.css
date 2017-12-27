@@ -9,7 +9,7 @@
 }
 
 .todo--form {
-  margin-bottom: 20px;
+  padding-left: 24px;
 }
 
 .todo--placeholder {
@@ -142,7 +142,7 @@
 }
 
 .todo--completed .todo__title {
-  /*text-decoration: line-through;*/
+  text-decoration: line-through;
 }
 
 /*Ensure todo child elements are not drop targets for drag / drop sorting*/
@@ -204,7 +204,7 @@
 }
 
 .todo-highlight {
-  background-color: #9abafe;
+  background-color: #fafad2;
   height: 100%;
   opacity: 0;
   pointer-events: none;
@@ -219,16 +219,17 @@
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
   animation-name: todo-highlight;
-  animation-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+  /* animation-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000); */
 }
 
 @keyframes todo-highlight {
   0% {
     width: 0;
-    opacity: 1;
-    transform: scale(0.5);
+    opacity: 0;
+    transform: scale(0.75);
   }
-  50% {
+  30% {
+    opacity: 1;
     width: 100%;
     transform: scale(1);
   }

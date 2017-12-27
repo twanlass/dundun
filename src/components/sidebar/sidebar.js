@@ -27,7 +27,7 @@ export default class Sidebar extends React.Component {
 
   render() {
     // new list options = things to do / things to remember
-    const {lists, todayBadgeCount, setActiveList, activeList, logout} = this.props;
+    const {lists, todayBadgeCount, setActiveList, activeList, onDone, logout} = this.props;
 
     let coreLists = _.filter(lists, { 'type': 'core'});
     let customLists = _.filter(lists, { 'type': 'custom'});
@@ -39,14 +39,14 @@ export default class Sidebar extends React.Component {
         <div className="sidebar-group">
           <div className="sidebar-item-label">Tasks</div>
           {coreLists.map(list => (
-            <SidebarItem key={list.id} list={list} todayBadgeCount={todayBadgeCount} setActiveList={setActiveList} activeList={activeList} />
+            <SidebarItem key={list.id} list={list} todayBadgeCount={todayBadgeCount} setActiveList={setActiveList} activeList={activeList} onDone={onDone} />
           ))}
         </div>
 
         <div className="sidebar-group">
           <div className="sidebar-item-label">Lists</div>
           {customLists.map(list => (
-            <SidebarItem key={list.id} list={list} setActiveList={setActiveList} activeList={activeList} />
+            <SidebarItem key={list.id} list={list} setActiveList={setActiveList} activeList={activeList} onDone={onDone} />
           ))}
         </div>
 

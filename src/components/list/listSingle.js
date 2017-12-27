@@ -117,25 +117,21 @@ export default class ListSingle extends React.Component {
     const {items, itemOrder, nowEditing, nowCompleting, nowDragging, add, remove, done, onDone, reorder, edit, onEdit, activeList}  = this.props;
 
     let order = itemOrder[activeList];
-    let completedItems = []
-    let notCompletedItems = []
-    let allItems = []
+    let listItems = []
     let lastItemId = null
 
     if (order) {
       order.forEach(function(item) {
         if (items[item]) {
-          items[item].completed ? completedItems.push(items[item]) : notCompletedItems.push(items[item]);
+          listItems.push(items[item])
         }
       })
 
-      lastItemId = notCompletedItems.length ? notCompletedItems[notCompletedItems.length - 1].id : null;
-
-      if(this.state.showDone) {
-        allItems = _.union(notCompletedItems, completedItems);
-      } else {
-        allItems = notCompletedItems;
+      if (!this.state.showDone) {
+        listItems = listItems.filter(item => !item.completed);
       }
+
+      lastItemId = listItems.length ? listItems[listItems.length - 1].id : null;
     }
 
     let itemsClasses = classNames(
@@ -155,7 +151,7 @@ export default class ListSingle extends React.Component {
             onDragOver={this.handleDragOver.bind(this)}
             transitionEnterTimeout={250}
             transitionLeaveTimeout={150}>
-            {allItems.map(item => (
+            {listItems.map(item => (
               <ListItem
                 todo={item}
                 key={this.itemKey(item)}

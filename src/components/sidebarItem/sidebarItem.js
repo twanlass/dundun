@@ -22,7 +22,7 @@ export default class SidebarItem extends React.Component {
   }
 
   render() {
-    const {list, setActiveList, activeList} = this.props;
+    const {list, setActiveList, activeList, onDone} = this.props;
 
     let navItemClasses = classNames(
       'sidebar-item',
@@ -30,7 +30,13 @@ export default class SidebarItem extends React.Component {
     );
 
     return (
-      <div className={navItemClasses} onClick={() => { setActiveList(list.id); }}>
+      <div
+        className={navItemClasses}
+        onClick={() => {
+          setActiveList(list.id); 
+          onDone(null);
+        }}
+      >
         {this.renderHashtag(list)}{list.title}{this.renderBadgeCount(list)}
       </div>
     )

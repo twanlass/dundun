@@ -18,6 +18,8 @@ export default class List extends React.Component {
     return list.type;
   }
 
+  // @todo - rename list types: flat, section
+  // See react native components and composition style (pass in data)
   render() {
     const {lists, activeList} = this.props;
 

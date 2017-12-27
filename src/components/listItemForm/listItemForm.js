@@ -22,10 +22,23 @@ export default class listItemForm extends React.Component {
   onAdd(e) {
     e.preventDefault();
 
+    // Empty item added
     if (!this.input.value)
       return;
 
-    this.handleAdd(this.input.value);
+    // Single item or comma separated list?
+    let items = this.input.value.split(',')
+
+    // Add multiple or singl item to list
+    if (items.length > 1) {
+      items.forEach(item =>(
+        this.handleAdd(item.trim())
+      ))
+    } else {
+      this.handleAdd(items[0]);
+    }
+
+    // Clear input form
     this.input.value = '';
   }
 
