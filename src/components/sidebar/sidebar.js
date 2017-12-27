@@ -21,7 +21,7 @@ export default class Sidebar extends React.Component {
   setBadgeCountTitle() {
     const {todayBadgeCount} = this.props;
     if (todayBadgeCount) {
-      document.title = `Todo App (${todayBadgeCount})`
+      document.title = `dundun (${todayBadgeCount})`
     }
   }
 

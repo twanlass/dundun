@@ -1,9 +1,24 @@
 .login-form {
-  background-color: #fff3e2;
+  /* background-color: #fff3e2; */
+}
+
+@media (max-width: 600px) {
+  .login-form .form {
+    max-width: 100%;
+    padding: 50px;
+  }
+}
+
+.login-form__logo {
+  align-self: flex-start;
+  margin-bottom: 40px;
+  margin-left: -6px;
+  user-select: none;
+  width: 48px;
 }
 
 .login-form-copyright {
-  color: #9c753e;
+  color: #999;
   font-size: 14px;
   font-weight: var(--weight__medium);
   margin-bottom: 20px;

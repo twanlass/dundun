@@ -22,7 +22,7 @@
 }
 
 .form-input {
-  border: 1px solid #ccc;
+  border: 0;
   font-family: inherit;
   font-size: 16px;
   font-size: 18px;
@@ -32,6 +32,7 @@
   padding: 0;
   text-indent: 10px;
   width: 100%;
+  background-color: #f1f1f1;
 }
 
 .form-label {

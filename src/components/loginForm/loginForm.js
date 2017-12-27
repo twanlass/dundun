@@ -20,7 +20,6 @@ export default class LoginForm extends React.Component {
     let user = Api.login({email, password})
 
     user.then(response => {
-      console.log(response)
       if (response) {
         // Store user token for API calls
         Auth.setUserToken(response.jwt);
@@ -58,7 +57,8 @@ export default class LoginForm extends React.Component {
     return (
       <div className="form-wrapper login-form">
         <form className="form" onSubmit={this.onSubmit.bind(this)}>
-            <div className="form-header">Welcome back, friend.</div>
+            <img className="login-form__logo" src="/favicon.png" alt="dundun logo" />
+            <div className="form-header">Welcome back,<br/>friend.</div>
             <label className="form-label">Email</label>
             <input className="form-input" name="email" type="text" autoFocus={true} value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
             <label className="form-label">Password</label>
