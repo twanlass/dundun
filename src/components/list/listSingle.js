@@ -26,7 +26,7 @@ export default class ListSingle extends React.Component {
     const {lists, activeList} = this.props;
 
     let list = _.filter(lists, { 'id': activeList})[0];
-    let date = list.title === 'today' ? Moment().format('dddd MMM Do') : null;
+    let date = list.title === 'today' ? Moment().format('dddd, MMM Do') : null;
 
     return (
       <ListHeader

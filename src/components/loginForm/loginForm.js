@@ -56,16 +56,16 @@ export default class LoginForm extends React.Component {
   render() {
     return (
       <div className="form-wrapper login-form">
-        <form className="form" onSubmit={this.onSubmit.bind(this)}>
-            <img className="login-form__logo" src="/favicon.png" alt="dundun logo" />
+        <form className="form" onSubmit={this.onSubmit.bind(this)} spellCheck="false">
+            <img className="login-form-logo" src="/favicon.png" alt="dundun logo" />
             <div className="form-header">Welcome back,<br/>friend.</div>
             <label className="form-label">Email</label>
-            <input className="form-input" name="email" type="text" autoFocus={true} value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
+            <input className="form-input" name="email" type="email" autoFocus={true} value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
             <label className="form-label">Password</label>
             <input className="form-input" name="password" type="password" value={this.state.password} onChange={this.handleInputChange.bind(this)}/>
             <input className="btn" type="submit" value="Sign in" />
         </form>
-        <div className="login-form-copyright">&copy; 2017-2018 48 Made LLC.</div>
+        <div className="login-form-copyright">&copy; 2017-{new Date().getFullYear()} 48 Made LLC.</div>
       </div>
     )
   }

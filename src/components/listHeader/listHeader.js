@@ -29,18 +29,26 @@ export default class ListHeader extends React.Component {
     }
   }
 
-  render() {
+  renderTitle() {
     const {title} = this.props;
 
+    if (title) {
+      return (
+        <div className="list-header__title">{title}</div>
+      )
+    }
+  }
+
+  render() {
     let todoListHeaderClasses = classNames(
       'list-header'
     );
 
     return (
       <div className={todoListHeaderClasses}>
-        <div className="list-header__title">
-          {title}
+        <div className="list-header__group">
           {this.renderDate()}
+          {this.renderTitle()}
         </div>
         {this.renderToggle()}
       </div>

@@ -2,7 +2,7 @@
   align-items: center;
   appearance: none;
   background-color: var(--color__primary);
-  border-radius: 0;
+  border-radius: var(--border-radius);
   border: 0;
   color: #fff;
   cursor: pointer;
@@ -10,7 +10,7 @@
   font-family: inherit;
   font-size: 16px;
   font-weight: var(--weight__medium);
-  height: 42px;
+  height: 52px;
   justify-content: center;
   letter-spacing: .25px;
   width: 100%;

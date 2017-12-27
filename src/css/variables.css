@@ -7,9 +7,11 @@
   --font-family-mono: 'Roboto Mono', monospace;
 
   /*Font weight scale*/
+  --weight__light: 300;
   --weight__normal: 400;
   --weight__medium: 500;
   --weight__bold: 700;
+  --weight__black: 900;
 
   /*Misc*/
   --border-radius: 3px;

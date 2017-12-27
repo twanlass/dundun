@@ -85,7 +85,7 @@ export default class listItemForm extends React.Component {
   }
 
   render() {
-    const {nowEditing, placeholder = "What's next?"} = this.props;
+    const {placeholder = "What's next?"} = this.props;
     let input;
 
     return (
@@ -101,7 +101,7 @@ export default class listItemForm extends React.Component {
               // set reference for onAdd
               this.input = input;
               // if we're not editing another todo, focus input
-              if(input && !nowEditing){input.focus()}
+              // if(input && !nowEditing){input.focus()}
             }}
           />
         </form>

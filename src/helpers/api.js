@@ -1,6 +1,6 @@
 import * as Auth from '../helpers/auth.js';
 
-const baseUrl = 'https://api.getdundun.com/v1/'
+const baseUrl = process.env.REACT_APP_API_ENDPOINT
 const headers = () => {
   return {
     'Content-Type': 'application/json',

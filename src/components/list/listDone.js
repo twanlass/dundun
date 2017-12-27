@@ -111,7 +111,7 @@ export default class ListDone extends React.Component {
       });
 
       // Skip days with no done items
-      if (dueToday.length) {
+      // if (dueToday.length) {
         let title = i === 1 ? 'yesterday' : day.format('dddd')
 
         days.push({
@@ -119,7 +119,7 @@ export default class ListDone extends React.Component {
           'date': day.format('MMM Do'),
           items: dueToday
         })
-      }
+      // }
     }
 
     return days;

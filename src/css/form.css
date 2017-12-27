@@ -18,21 +18,30 @@
   font-size: 34px;
   font-weight: var(--weight__bold);
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+  user-select: none;
 }
 
 .form-input {
-  border: 0;
+  background-color: #e7ebef;
+  border: 2px solid #e7ebef;
+  color: inherit;
   font-family: inherit;
   font-size: 16px;
   font-size: 18px;
   font-weight: var(--weight__medium);
-  height: 42px;
+  height: 52px;
   margin-bottom: 16px;
   padding: 0;
-  text-indent: 10px;
+  text-indent: 14px;
   width: 100%;
-  background-color: #f1f1f1;
+  border-radius: var(--border-radius);
+}
+
+.form-input:focus {
+  outline: 0;
+  background-color: #fff;
 }
 
 .form-label {

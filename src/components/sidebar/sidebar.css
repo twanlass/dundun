@@ -10,6 +10,13 @@
   display: flex;
 }
 
+.sidebar-logo {
+  left: -5px;
+  margin-bottom: 20px;
+  position: relative;
+  width: 32px;
+}
+
 .sidebar-group {
   margin-bottom: 30px;
 }
