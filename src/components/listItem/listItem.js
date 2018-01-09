@@ -91,7 +91,7 @@ export default class ListItem extends React.Component {
   }
 
   render() {
-    const {todo, nowEditing, nowCompleting, dragStart, dragEnd} = this.props;
+    const {todo, nowEditing, nowCompleting, onDone, dragStart, dragEnd} = this.props;
 
     let todoClasses = classNames(
       'todo',
@@ -109,6 +109,10 @@ export default class ListItem extends React.Component {
       'todo-highlight',
       {'todo-highlight--active': todo.id === nowCompleting}
     );
+
+    if (todo.id === nowCompleting) {
+      setTimeout(() => onDone(null), 1000);
+    }
 
     // If the item id we're editing is null, allow dragging
     let draggable = nowEditing ? false : true;
