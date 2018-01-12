@@ -62,6 +62,15 @@ export const login = (user) => {
   })
 }
 
+export const create = (user) => {
+  return fetchWrapper({
+    url: 'user',
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({user: user})
+  })
+}
+
 // Generic fetch wrapper
 const fetchWrapper = (options) => {
   return fetch(baseUrl + options.url, {

@@ -1,6 +1,7 @@
 import React from 'react';
 import AppContainer from '../../containers/appContainer/appContainer.js';
-import AuthContainer from '../../containers/authContainer/authContainer.js';
+import LoginContainer from '../../containers/loginContainer/loginContainer.js';
+import SignupContainer from '../../containers/signupContainer/signupContainer.js';
 
 export default class Router extends React.Component {
   route() {
@@ -15,7 +16,12 @@ export default class Router extends React.Component {
 
       case '/login':
         return (
-          <AuthContainer/>
+          <LoginContainer/>
+        )
+
+      case '/signup':
+        return (
+          <SignupContainer/>
         )
 
       default:

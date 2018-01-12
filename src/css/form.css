@@ -28,7 +28,6 @@
   border: 2px solid #e7ebef;
   color: inherit;
   font-family: inherit;
-  font-size: 16px;
   font-size: 18px;
   font-weight: var(--weight__medium);
   height: 52px;
@@ -52,4 +51,18 @@
   text-transform: uppercase;
   width: 100%;
   user-select: none;
+}
+
+.form-link {
+  color: #999;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: var(--weight__medium);
+  padding: 10px;
+  transition: color .15s;
+}
+
+.form-link:hover {
+  color: #666;
+  transition: color .15s;
 }

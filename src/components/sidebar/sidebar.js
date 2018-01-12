@@ -52,7 +52,7 @@ export default class Sidebar extends React.Component {
         </div>
 
         <div className="sidebar-group sidebar-group--settings">
-          <div className="sidebar-item" onClick={logout}>Logout</div>
+          <div className="sidebar-item" onClick={logout}>Logout &rarr;</div>
         </div>
       </div>
     );
