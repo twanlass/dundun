@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import Moment from 'moment';
 import classNames from 'classnames';
-import { CSSTransitionGroup } from 'react-transition-group';
 import ListHeader from '../listHeader/listHeader.js'
 import ListItem from '../listItem/listItem.js';
 import ListItemForm from '../listItemForm/listItemForm.js';
@@ -163,14 +162,7 @@ export default class ListGroup extends React.Component {
                 title={day.title}
                 date={day.dateString}
               />
-              <CSSTransitionGroup
-                transitionName="todo-"
-                component="div"
-                className={itemsClasses}
-                data-id={this.props.title}
-                onDragOver={this.handleDragOver.bind(this)}
-                transitionEnterTimeout={250}
-                transitionLeaveTimeout={150}>
+              <div className={itemsClasses} data-id={this.props.title} onDragOver={this.handleDragOver.bind(this)}>
                 {day.items.map(item => (
                   <ListItem
                     todo={item}
@@ -188,7 +180,7 @@ export default class ListGroup extends React.Component {
                     activeList={activeList}
                     />
                 ))}
-              </CSSTransitionGroup>
+              </div>
               <ListItemForm
                 add={add}
                 onEdit={onEdit}
