@@ -3,6 +3,7 @@ import browserHistory from '../../helpers/history.js';
 import MomentTimezone from 'moment-timezone'
 import * as Api from '../../helpers/api.js';
 import * as Auth from '../../helpers/auth.js';
+import Footer from '../footer/footer.js';
 import './signupForm.css';
 
 export default class SignupForm extends React.Component {
@@ -74,12 +75,12 @@ export default class SignupForm extends React.Component {
             <div className="form-header">Welcome,<br/>friend.</div>
             <label className="form-label">Email</label>
             <input className="form-input" name="email" type="email" autoFocus={true} value={this.state.email} onChange={this.handleInputChange.bind(this)}/>
-            <label className="form-label">Password</label>
+            <label className="form-label">Create a Password</label>
             <input className="form-input" name="password" type="password" value={this.state.password} onChange={this.handleInputChange.bind(this)}/>
             <input className="btn" type="submit" value="Sign up &rarr;" />
             <div className="form-link" onClick={this.onSignin.bind(this)}>Or sign in</div>
         </form>
-        <div className="login-form-copyright">&copy; 2017-{new Date().getFullYear()} 48 Made LLC.</div>
+        <Footer />
       </div>
     )
   }

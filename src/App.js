@@ -22,11 +22,23 @@ export default class App extends React.Component {
   componentDidMount() {
     this.unsubscribe = browserHistory.listen(location => {
       this.setState({location});
+
+      // Reinitialize Headway on route change
+      this.init_headway();
     });
   }
 
   componentWillUnmount() {
     this.unsubscribe();
+  }
+
+  init_headway() {
+    const hw_config = {
+      selector: ".js-headway",
+      trigger: ".sidebar-logo",
+      account:  "7LY9XJ"
+    };
+    window.Headway.init(hw_config);
   }
 
   render() {

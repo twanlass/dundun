@@ -36,7 +36,10 @@ export default class Sidebar extends React.Component {
 
     return (
       <div className="sidebar">
-        <img className="sidebar-logo" src="/favicon.png" alt="dundun logo" />
+        <div className="sidebar-header js-headway">
+          <img className="sidebar-logo" src="/favicon.png" alt="dundun logo" />
+        </div>
+
         <div className="sidebar-group">
           <div className="sidebar-item-label">Tasks</div>
           {coreLists.map(list => (

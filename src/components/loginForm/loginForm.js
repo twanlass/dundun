@@ -2,6 +2,7 @@ import React from 'react';
 import browserHistory from '../../helpers/history.js';
 import * as Api from '../../helpers/api.js';
 import * as Auth from '../../helpers/auth.js';
+import Footer from '../footer/footer.js';
 import './loginForm.css';
 
 export default class LoginForm extends React.Component {
@@ -70,7 +71,7 @@ export default class LoginForm extends React.Component {
             <input className="btn" type="submit" value="Sign in &rarr;" />
             <div className="form-link" onClick={this.onSignup.bind(this)}>Or create an account</div>
         </form>
-        <div className="login-form-copyright">&copy; 2017-{new Date().getFullYear()} 48 Made LLC.</div>
+        <Footer />
       </div>
     )
   }

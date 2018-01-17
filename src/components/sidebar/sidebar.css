@@ -10,11 +10,9 @@
   display: flex;
 }
 
-.sidebar-logo {
-  left: -5px;
-  margin-bottom: 20px;
-  position: relative;
-  width: 32px;
+.sidebar-header {
+  display: flex;
+  flex: 0 0 52px;
 }
 
 .sidebar-group {
@@ -24,6 +22,20 @@
 .sidebar-group--settings {
   margin-top: auto;
   margin-bottom: 0px;
+}
+
+.sidebar-logo {
+  left: -5px;
+  margin-bottom: 20px;
+  position: relative;
+  width: 32px;
+}
+
+/* Headway widget styling */
+#HW_badge_cont.HW_visible {
+  position: relative;
+  left: -16px;
+  top: -10px;
 }
 
 @media (max-width: 600px) {
