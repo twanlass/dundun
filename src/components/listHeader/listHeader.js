@@ -8,8 +8,8 @@ export default class ListHeader extends React.Component {
     let {showDone, toggleShowDone, showToggle = true} = this.props;
 
     let toggleClasses = classNames(
-      'ico-filter',
-      {'ico-filter--active': !showDone}
+      'ico-sort',
+      {'ico-sort--active': !showDone}
     );
 
     if (showToggle) {

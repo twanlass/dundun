@@ -41,7 +41,7 @@
   top: 2px;
 }
 
-.list-header .ico-filter {
+.list-header .ico-sort {
   color: #999;
   font-size: 10px;
   padding: 10px;
@@ -49,11 +49,11 @@
   cursor: pointer;
 }
 
-.list-header .ico-filter:hover {
+.list-header .ico-sort:hover {
   transition: color .15s;
   color: #333;
 }
 
-.list-header .ico-filter--active {
+.list-header .ico-sort--active {
   color: #333;
 }
