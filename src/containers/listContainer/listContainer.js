@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import List from '../../components/list/list.js'
 import {addItem} from '../../actionCreators/addItem.js';
 import {editItem} from '../../actionCreators/editItem.js';
+import {snoozeItem} from '../../actionCreators/snoozeItem.js';
 import {reorderItem} from '../../actionCreators/reorderItem.js';
 import {removeItem} from '../../actionCreators/removeItem.js';
 import {toggleItem} from '../../actionCreators/toggleItem.js';
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
   return {
     add: (title, createdAt, dueAt, isEvent, listId) => { dispatch(addItem(title, createdAt, dueAt, isEvent, listId)) },
     edit: (title, id) => { dispatch(editItem(title, id)) },
+    snooze: (id, dueAt, listId) => { dispatch(snoozeItem(id, dueAt, listId)) },
     done: (id, listId, completed) => { dispatch(toggleItem(id, listId, completed)) },
     reorder: (id, from, to, listId) => { dispatch(reorderItem(id, from, to, listId)) },
     remove: (id, listId) => { dispatch(removeItem(id, listId)) },

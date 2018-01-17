@@ -27,7 +27,7 @@ export default class listItemForm extends React.Component {
       return;
 
     // Single item or comma separated list?
-    let items = this.input.value.split(',')
+    let items = this.input.value.split(';')
 
     // Add multiple or singl item to list
     if (items.length > 1) {

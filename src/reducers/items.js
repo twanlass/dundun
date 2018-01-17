@@ -1,6 +1,7 @@
 import {
   ADD_ITEM,
   EDIT_ITEM,
+  SNOOZE_ITEM,
   TOGGLE_ITEM,
   REMOVE_ITEM,
   RECEIVE_LIST_ITEMS
@@ -18,6 +19,11 @@ export const items = (state = initialItems, action) => {
     case EDIT_ITEM:
       newState = Object.assign({}, state);
       newState[action.id] = Object.assign(newState[action.id], {...action.item})
+      return newState
+
+    case SNOOZE_ITEM:
+      newState = Object.assign({}, state);
+      delete newState[action.id]
       return newState
 
     case REMOVE_ITEM:

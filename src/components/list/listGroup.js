@@ -16,21 +16,6 @@ export default class ListGroup extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.scrollList()
-  }
-
-  componentDidUpdate() {
-    this.scrollList()
-  }
-
-  scrollList() {
-    let list = document.getElementsByClassName('todo-lists')
-    if (list.length) {
-      list[0].scrollTop = 0
-    }
-  }
-
   toggleShowDone() {
     let showDone = !this.state.showDone;
     this.setState({ showDone: showDone });
@@ -139,7 +124,7 @@ export default class ListGroup extends React.Component {
   }
 
   render() {
-    const {itemOrder, add, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
+    const {lists, itemOrder, add, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
 
     let lastItemId = null
 
@@ -177,6 +162,7 @@ export default class ListGroup extends React.Component {
                     onEdit={onEdit}
                     dragStart={this.handleDragStart.bind(this)}
                     dragEnd={this.handleDragEnd.bind(this)}
+                    lists={lists}
                     activeList={activeList}
                     />
                 ))}

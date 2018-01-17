@@ -35,21 +35,24 @@
 
 .todo__actions {
   display: none;
+  margin-left: 10px;
 }
 
 .todo__actions--active {
   display: flex;
 }
 
-  .todo__actions .ico-trash {
+  .todo__actions .ico-trash,
+  .todo__actions .ico-clock {
     font-size: 16px;
     color: #969698;
-    padding: 10px 0 10px 10px;
+    padding: 10px;
     cursor: pointer;
     transition: color .15s;
   }
 
-  .todo__actions .ico-trash:hover {
+  .todo__actions .ico-trash:hover,
+  .todo__actions .ico-clock:hover {
     color: #333;
     transition: color .15s;
   }
@@ -88,12 +91,13 @@
   font-family: inherit;
   font-size: 16px;
   margin-right: 10px;
-  margin: 2px 0;
   overflow: hidden;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  position: relative;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 100%;
-  position: relative;
   z-index: 1;
 }
 

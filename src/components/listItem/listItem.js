@@ -1,4 +1,6 @@
 import React from 'react';
+import Moment from 'moment';
+import _ from 'lodash';
 import classNames from 'classnames';
 import Autolinker from 'autolinker';
 import ListItemDate from '../listItemDate/listItemDate.js';
@@ -52,6 +54,18 @@ export default class ListItem extends React.Component {
     this.resetNowEditing()
   }
 
+  onSnooze(id) {
+    const {lists, todo, snooze} = this.props;
+
+    // Get Upcoming listId
+    let listId = _.filter(lists, {'title':'upcoming', 'type': 'core'})[0].id
+
+    // // Snooze for one day
+    let dueAt = Moment(todo.due_at).add(1, 'day').utc().format()
+    snooze(id, dueAt, listId)
+    this.resetNowEditing()
+  }
+
   onDone(id, completed) {
     const {onDone} = this.props;
 
@@ -71,6 +85,17 @@ export default class ListItem extends React.Component {
   resetNowEditing() {
     const {onEdit} = this.props;
     onEdit(null)
+  }
+
+  renderSnooze() {
+    const {lists, activeList, todo} = this.props;
+
+    let todayListId = _.filter(lists, {'title':'today', 'type': 'core'})[0].id
+    if (todayListId === activeList) {
+      return (
+        <i className="ico-clock" onClick={() => { this.onSnooze(todo.id); }}></i>
+      )
+    }
   }
 
   renderTitle() {
@@ -134,6 +159,7 @@ export default class ListItem extends React.Component {
         {this.renderTitle()}
         <ListItemDate todo={todo} />
         <div className={todoActionClasses}>
+          {this.renderSnooze()}
           <i className="ico-trash" onClick={() => { this.onRemove(todo.id); }}></i>
         </div>
         <div className={todoHighlightClasses}></div>

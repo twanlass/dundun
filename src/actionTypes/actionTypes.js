@@ -13,6 +13,7 @@ export const EDIT_ITEM = 'EDIT_ITEM'
 export const REORDER_ITEM = 'REORDER_ITEM'
 export const REMOVE_ITEM = 'REMOVE_ITEM'
 export const TOGGLE_ITEM = 'TOGGLE_ITEM'
+export const SNOOZE_ITEM = 'SNOOZE_ITEM'
 
 // State
 export const SET_NOW_EDITING = 'SET_NOW_EDITING'

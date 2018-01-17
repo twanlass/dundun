@@ -125,7 +125,7 @@ export default class ListDone extends React.Component {
   }
 
   render() {
-    const {itemOrder, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
+    const {lists, itemOrder, remove, done, onDone, reorder, edit, onEdit, nowEditing, nowCompleting, nowDragging, activeList}  = this.props;
 
     let itemsClasses = classNames(
       'todos',
@@ -161,6 +161,7 @@ export default class ListDone extends React.Component {
                     onEdit={onEdit}
                     dragStart={this.handleDragStart.bind(this)}
                     dragEnd={this.handleDragEnd.bind(this)}
+                    lists={lists}
                     activeList={activeList}
                     />
                 ))}
