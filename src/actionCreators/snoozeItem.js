@@ -1,5 +1,6 @@
 import * as Api from '../helpers/api.js';
 import { SNOOZE_ITEM } from '../actionTypes/actionTypes.js';
+import {decrementTodayBadgeCount} from './decrementTodayBadgeCount.js';
 
 const snooze = (id) => {
   return {
@@ -15,5 +16,6 @@ export const snoozeItem = (id, due_at, list_id) => {
 
     // Immediately edit item in client collection
     dispatch(snooze(id));
+    dispatch(decrementTodayBadgeCount());
   };
 }
