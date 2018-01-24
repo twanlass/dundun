@@ -14,7 +14,8 @@ export const snoozeItem = (id, due_at, list_id) => {
     // Update via API
     Api.updateListItem({id, due_at, list_id})
 
-    // Immediately edit item in client collection
+    // Immediately remove item in client collection
+    // and update Today badge count
     dispatch(snooze(id));
     dispatch(decrementTodayBadgeCount());
   };

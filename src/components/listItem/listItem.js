@@ -10,11 +10,7 @@ export default class ListItem extends React.Component {
 
   onEnter(id, e) {
     if (e.keyCode === 13) {
-      if (!e.target.value)
-        return;
-
       this.handleEdit(e.target.value)
-
     } else if (e.keyCode === 27) {
       this.resetNowEditing()
     }
@@ -23,7 +19,9 @@ export default class ListItem extends React.Component {
   handleEdit(title) {
     const {todo, edit} = this.props;
 
-    if (todo.title !== title) {
+    if (title === '') {
+      this.onRemove(todo.id)
+    } else if (todo.title !== title) {
       edit(title, todo.id)
     }
 

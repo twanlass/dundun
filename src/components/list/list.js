@@ -25,7 +25,6 @@ export default class List extends React.Component {
 
     if (activeList) {
       let listTitle = lists[activeList].title
-      console.log(listTitle)
 
       if (listTitle === 'upcoming') {
         return (

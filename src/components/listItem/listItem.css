@@ -58,14 +58,15 @@
   }
 
 .todo {
-  padding-top: 0;
-  padding-bottom: 0;
-  margin-top: 0;
-  margin-bottom: 0;
-  transition-property: padding-top, padding-bottom, margin-top, margin-bottom, background-color;
-  transition-duration: .1s;
-  transition-timing-function: ease-in;
   background-color: #fff;
+  height: 38px;
+  margin-bottom: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+  transition-duration: .1s;
+  transition-property: padding-top, padding-bottom, margin-top, margin-bottom, background-color;
+  transition-timing-function: ease-in;
 }
 
 .todo--editing {
@@ -77,6 +78,7 @@
   transition-property: padding-top, padding-bottom, margin-top, margin-bottom, background-color;
   transition-duration: .1s;
   transition-timing-function: ease-in;
+  height: auto;
 }
 
 .todos {
