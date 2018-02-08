@@ -20,13 +20,10 @@ export default class Sidebar extends React.Component {
 
   setBadgeCountTitle() {
     const {todayBadgeCount} = this.props;
-    if (todayBadgeCount) {
-      document.title = `dundun (${todayBadgeCount})`
-    }
+    document.title = todayBadgeCount ? `dundun (${todayBadgeCount})` : 'dundun'
   }
 
   render() {
-    // new list options = things to do / things to remember
     const {lists, todayBadgeCount, setActiveList, activeList, onDone, logout} = this.props;
 
     let coreLists = _.filter(lists, { 'type': 'core'});

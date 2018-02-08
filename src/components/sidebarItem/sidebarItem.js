@@ -6,7 +6,7 @@ export default class SidebarItem extends React.Component {
   renderBadgeCount(list) {
     const {todayBadgeCount} = this.props;
 
-    if (list.title === 'today') {
+    if (list.title === 'today' && todayBadgeCount) {
       return (
         <div className="sidebar-item__badge-count">{todayBadgeCount}</div>
       )
@@ -33,7 +33,7 @@ export default class SidebarItem extends React.Component {
       <div
         className={navItemClasses}
         onClick={() => {
-          setActiveList(list.id); 
+          setActiveList(list.id);
           onDone(null);
         }}
       >
