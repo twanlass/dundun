@@ -58,10 +58,13 @@ export default class ListItem extends React.Component {
     // Get Upcoming listId
     let listId = _.filter(lists, {'title':'upcoming', 'type': 'core'})[0].id
 
-    // Calc day diff between due_at and today, add 1 day (tomorrow)
-    let daysToSnooze = (Moment(todo.due_at).diff(Moment(), 'days')*-1) + 1
+    // Calc day diff between due_at and today
+    // Moment.diff() returns a float. Round up for full day,
+    // then add one additional day to push date to tomorrow
+    let daysToSnooze = Math.ceil(Moment().diff(Moment(todo.due_at), 'days', true)) + 1
 
     // Snooze to tomorrow
+    // Just add days to timestamp to preserve any hours, minutes etc
     let dueAt = Moment(todo.due_at).add(daysToSnooze, 'day').utc().format()
     snooze(id, dueAt, listId)
     this.resetNowEditing()
